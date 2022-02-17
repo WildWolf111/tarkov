@@ -311,7 +311,7 @@ func (api *APIServer) PostToAuth(writer http.ResponseWriter, req *http.Request) 
 		api.logger.Info("Can not claim jwt-token")
 		msg := Message{
 			StatusCode: 500,
-			Message:    "We have some promblems.Plis try again later",
+			Message:    "We have some promblems.Pleas try again later",
 		}
 		writer.WriteHeader(500)
 		json.NewEncoder(writer).Encode(msg)
