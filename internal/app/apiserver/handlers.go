@@ -6,9 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"StandarWebServer2/internal/models"
-
 	"github.com/gorilla/mux"
+	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
 )
 
 type Message struct {

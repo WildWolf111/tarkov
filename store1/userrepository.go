@@ -1,9 +1,10 @@
 package store
 
 import (
-	"StandarWebServer2/internal/models"
 	"fmt"
 	"log"
+
+	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
 )
 
 type UserRepository struct {

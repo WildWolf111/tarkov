@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"StandarWebServer2/internal/models"
+	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
 )
 
 type ArticleRepository struct {

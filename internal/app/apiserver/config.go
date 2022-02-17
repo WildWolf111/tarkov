@@ -1,6 +1,6 @@
 package apiserver
 
-import "StandarWebServer2/store"
+import store "github.com/vlasove/8.HandlerImpl2/store1"
 
 //General config for rest api
 type Config struct {
