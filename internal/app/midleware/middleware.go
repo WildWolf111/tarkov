@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	SecretKey      []byte      = []byte("UltraRestApiSecretKey9000")
+	SecretKey      []byte      = []byte("UltraRestApiSecretKey7000")
 	emptyValidFunc jwt.Keyfunc = func(token *jwt.Token) (interface{}, error) {
 		return SecretKey, nil
 	}

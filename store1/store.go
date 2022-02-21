@@ -13,6 +13,7 @@ type Store struct {
 	db                *sql.DB
 	userRepository    *UserRepository
 	articleRepository *ArticleRepository
+	companyRepository *CompanyRepository
 }
 
 // Constructor for store
@@ -63,4 +64,15 @@ func (s *Store) Article() *ArticleRepository {
 		store: s,
 	}
 	return s.articleRepository
+}
+
+//Public for CompanyRepo
+func (s *Store) Company() *CompanyRepository {
+	if s.companyRepository != nil {
+		return s.companyRepository
+	}
+	s.companyRepository = &CompanyRepository{
+		store: s,
+	}
+	return s.companyRepository
 }

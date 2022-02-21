@@ -57,13 +57,13 @@ func (s *APIServer) configureLogger() error {
 
 //func for configure Router
 func (s *APIServer) configureRouter() {
-	s.router.HandleFunc(prefix+"/articles", s.GetAllArticles).Methods("GET")
+	s.router.HandleFunc(prefix+"/companies", s.GetAllCompanies).Methods("GET")
 	//s.router.HandleFunc(prefix+"/articles"+"/{id}", s.GetArticleById).Methods("GET")
-	s.router.Handle(prefix+"/articles"+"/{id}", midleware.JwtMiddleware.Handler(
-		http.HandlerFunc(s.GetArticleById),
+	s.router.Handle(prefix+"//companies"+"/{id}", midleware.JwtMiddleware.Handler(
+		http.HandlerFunc(s.GetCompanyById),
 	)).Methods("GET")
-	s.router.HandleFunc(prefix+"/articles"+"/{id}", s.DeleteArticleById).Methods("DELETE")
-	s.router.HandleFunc(prefix+"/articles", s.PostArticle).Methods("POST")
+	s.router.HandleFunc(prefix+"/companies"+"/{id}", s.DeleteCompanyById).Methods("DELETE")
+	s.router.HandleFunc(prefix+"/companies", s.PostCompany).Methods("POST")
 	s.router.HandleFunc(prefix+"/user/register", s.PostUserRegister).Methods("POST")
 
 	s.router.HandleFunc(prefix+"/user/auth", s.PostToAuth).Methods("POST")
