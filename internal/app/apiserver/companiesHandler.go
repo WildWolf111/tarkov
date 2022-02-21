@@ -10,9 +10,9 @@ import (
 	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
 )
 
-func (api *APIServer) GetAllCompanies(writer http.ResponseWriter, req *http.Request) {
+func (api *APIServer) GetAllCompany(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	articles, err := api.store.Companies().SelectAll()
+	company, err := api.store.Company().SelectAll()
 	if err != nil {
 		api.logger.Info(err)
 		msg := Message{
@@ -24,16 +24,16 @@ func (api *APIServer) GetAllCompanies(writer http.ResponseWriter, req *http.Requ
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	api.logger.Info("Get All Companies GET /articles")
+	api.logger.Info("Get All Companies GET /companies")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(articles)
+	json.NewEncoder(writer).Encode(company)
 }
 
 func (api *APIServer) PostCompany(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Post Company POST /articles")
-	var article models.Article
-	err := json.NewDecoder(req.Body).Decode(&article)
+	api.logger.Info("Post Company POST /companies")
+	var company models.Companies
+	err := json.NewDecoder(req.Body).Decode(&company)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
 		msg := Message{
@@ -45,8 +45,8 @@ func (api *APIServer) PostCompany(writer http.ResponseWriter, req *http.Request)
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-
-	a, err := api.store.Article().Create(&article)
+	fmt.Println(company)
+	a, err := api.store.Company().Create(&company)
 	if err != nil {
 		api.logger.Info("Troubles while connections to the company database:", err)
 		msg := Message{

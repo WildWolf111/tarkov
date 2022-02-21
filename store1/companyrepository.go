@@ -17,7 +17,7 @@ var (
 
 //For Post request
 func (co *CompanyRepository) Create(a *models.Companies) (*models.Companies, error) {
-	query := fmt.Sprintf("INSERT INTO %s (title, author, content) VALUES ($1, $2, $3) RETURNING id", tableArticle)
+	query := fmt.Sprintf("INSERT INTO %s (id, name, slug, inn, kpp) VALUES ($1, $2, $3,$4,$5) RETURNING id", tablecompanies)
 	if err := co.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.INN, a.KPP).Scan(&a.ID); err != nil {
 		return nil, err
 	}
