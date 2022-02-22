@@ -12,13 +12,21 @@ type WarehouseRepository struct {
 }
 
 var (
-	tablewarehouse string = "warehouse"
+	tablewarehouse string = "warehouses"
 )
 
 //For Post request
 func (wa *WarehouseRepository) Create(a *models.Warehouses) (*models.Warehouses, error) {
-	query := fmt.Sprintf("INSERT INTO %s (id, name, slug, company_id, address) VALUES ($1, $2, $3,$4,$5) RETURNING id", tablewarehouse)
-	if err := wa.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.Company_id, a.Address).Scan(&a.ID); err != nil {
+	query := fmt.Sprintf("INSERT INTO %s (name, slug, company_id, address, id) VALUES ($1, $2, $3,$4,$5) RETURNING id", tablewarehouse)
+	if err := wa.store.db.QueryRow(query, a.Name, a.Slug, a.Company_id, a.Address, a.ID).Scan(&a.ID); err != nil {
+		return nil, err
+	}
+	return a, nil
+}
+
+func (wa *WarehouseRepository) UpdateWarehouseById(a *models.Warehouses) (*models.Warehouses, error) {
+	query := fmt.Sprintf("UPDATE %s SET name=$1, slug=$2, company_id=$3, address=$4) WHERE id=$5 RETURNING id", tablewarehouse)
+	if err := wa.store.db.QueryRow(query, a.Name, a.Slug, a.Company_id, a.Address, a.ID).Scan(&a.ID); err != nil {
 		return nil, err
 	}
 	return a, nil

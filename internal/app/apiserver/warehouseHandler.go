@@ -3,6 +3,7 @@ package apiserver
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -48,7 +49,7 @@ func (api *APIServer) PostWarhouse(writer http.ResponseWriter, req *http.Request
 	fmt.Println(warehouse)
 	a, err := api.store.Warehouse().Create(&warehouse)
 	if err != nil {
-		api.logger.Info("Troubles while connections to the company database:", err)
+		api.logger.Info("Troubles while connections to the warehouse database:", err)
 		msg := Message{
 			StatusCode: 501,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -168,4 +169,51 @@ func (api *APIServer) DeleteWarehouseById(writer http.ResponseWriter, req *http.
 		IsError:    false,
 	}
 	json.NewEncoder(writer).Encode(msg)
+}
+
+//warehouse update
+func (api *APIServer) UpdateWarehouseById(writer http.ResponseWriter, request *http.Request) {
+	initHeaders(writer)
+	log.Println("Updating Warehouse ...")
+	id, err := strconv.Atoi(mux.Vars(request)["id"])
+	if err != nil {
+		log.Println("error while parsing happend:", err)
+		writer.WriteHeader(400)
+		msg := Message{
+			StatusCode: 400,
+			Message:    "do not use parameter ID as uncasted to int type",
+			IsError:    true,
+		}
+		json.NewEncoder(writer).Encode(msg)
+		return
+	}
+
+	var newWarehouse models.Warehouses
+
+	err = json.NewDecoder(request.Body).Decode(&newWarehouse)
+	if err != nil {
+		msg := Message{
+			StatusCode: 400,
+			Message:    "provideed json file is invalid",
+			IsError:    true,
+		}
+		writer.WriteHeader(400)
+		json.NewEncoder(writer).Encode(msg)
+		return
+	}
+	newWarehouse.ID = id
+	a, err := api.store.Warehouse().UpdateWarehouseById(&newWarehouse)
+	if err != nil {
+		api.logger.Info("Troubles while connections to the company database:", err)
+		msg := Message{
+			StatusCode: 501,
+			Message:    "We have some troubles to accessing database. Try again",
+			IsError:    true,
+		}
+		writer.WriteHeader(501)
+		json.NewEncoder(writer).Encode(msg)
+		return
+	}
+	writer.WriteHeader(201)
+	json.NewEncoder(writer).Encode(a)
 }
