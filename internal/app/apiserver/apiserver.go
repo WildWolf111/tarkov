@@ -62,11 +62,20 @@ func (s *APIServer) configureRouter() {
 	s.router.HandleFunc(prefix+"/articles", s.PostArticle).Methods("POST")
 
 	s.router.HandleFunc(prefix+"/user/register", s.PostUserRegister).Methods("POST")
+
 	//router companies
 	s.router.HandleFunc(prefix+"/companies", s.GetAllCompany).Methods("GET")
 	s.router.HandleFunc(prefix+"/companies"+"/{id}", s.GetCompanyById).Methods("GET")
 	s.router.HandleFunc(prefix+"/companies"+"/{id}", s.DeleteCompanyById).Methods("DELETE")
 	s.router.HandleFunc(prefix+"/companies", s.PostCompany).Methods("POST")
+	s.router.HandleFunc(prefix+"/companies", s.PutCompany).Methods("PUT")
+
+	//router warehouses
+	s.router.HandleFunc(prefix+"/warehouses", s.GetAllWarehouse).Methods("GET")
+	s.router.HandleFunc(prefix+"/warehouses"+"/{id}", s.GetWarehouseById).Methods("GET")
+	s.router.HandleFunc(prefix+"/warehouses"+"/{id}", s.DeleteWarehouseById).Methods("DELETE")
+	s.router.HandleFunc(prefix+"/warehouses", s.PostWarhouse).Methods("POST")
+	s.router.HandleFunc(prefix+"/warehouses", s.PutWarhouse).Methods("PUT")
 }
 
 //configureStore method
