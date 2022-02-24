@@ -3,6 +3,7 @@ package apiserver
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -168,4 +169,51 @@ func (api *APIServer) DeleteCompanyById(writer http.ResponseWriter, req *http.Re
 		IsError:    false,
 	}
 	json.NewEncoder(writer).Encode(msg)
+}
+
+//warehouse update
+func (api *APIServer) UpdateCompanyById(writer http.ResponseWriter, request *http.Request) {
+	initHeaders(writer)
+	log.Println("Updating Company ...")
+	id, err := strconv.Atoi(mux.Vars(request)["id"])
+	if err != nil {
+		log.Println("error while parsing happend:", err)
+		writer.WriteHeader(400)
+		msg := Message{
+			StatusCode: 400,
+			Message:    "do not use parameter ID as uncasted to int type",
+			IsError:    true,
+		}
+		json.NewEncoder(writer).Encode(msg)
+		return
+	}
+
+	var newCompany models.Warehouses
+
+	err = json.NewDecoder(request.Body).Decode(&newCompany)
+	if err != nil {
+		msg := Message{
+			StatusCode: 400,
+			Message:    "provideed json file is invalid",
+			IsError:    true,
+		}
+		writer.WriteHeader(400)
+		json.NewEncoder(writer).Encode(msg)
+		return
+	}
+	newCompany.ID = id
+	a, err := api.store.Warehouse().UpdateWarehouseById(&newCompany)
+	if err != nil {
+		api.logger.Info("Troubles while connections to the company database:", err)
+		msg := Message{
+			StatusCode: 501,
+			Message:    "We have some troubles to accessing database. Try again",
+			IsError:    true,
+		}
+		writer.WriteHeader(501)
+		json.NewEncoder(writer).Encode(msg)
+		return
+	}
+	writer.WriteHeader(201)
+	json.NewEncoder(writer).Encode(a)
 }

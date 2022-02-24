@@ -24,6 +24,17 @@ func (co *CompanyRepository) Create(a *models.Companies) (*models.Companies, err
 	return a, nil
 }
 
+// For Put request
+
+func (co *CompanyRepository) Update(a *models.Companies) (*models.Companies, error) {
+	query := fmt.Sprintf("UPDATE %s SET (id, name, slug, inn, kpp) VALUES ($1, $2, $3,$4,$5)WHERE id=$1 RETURNING id", tablecompanies)
+	if err := co.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.INN, a.KPP).Scan(&a.ID); err != nil {
+		return nil, err
+	}
+	return a, nil
+
+}
+
 //For DELETE request
 func (co *CompanyRepository) DeleteById(id int) (*models.Companies, error) {
 	companies, ok, err := co.FindCompanyById(id)

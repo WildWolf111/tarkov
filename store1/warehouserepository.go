@@ -24,6 +24,7 @@ func (wa *WarehouseRepository) Create(a *models.Warehouses) (*models.Warehouses,
 	return a, nil
 }
 
+//For Update request
 func (wa *WarehouseRepository) UpdateWarehouseById(a *models.Warehouses) (*models.Warehouses, error) {
 	query := fmt.Sprintf("UPDATE %s SET name=$1, slug=$2, company_id=$3, address=$4) WHERE id=$5 RETURNING id", tablewarehouse)
 	if err := wa.store.db.QueryRow(query, a.Name, a.Slug, a.Company_id, a.Address, a.ID).Scan(&a.ID); err != nil {
