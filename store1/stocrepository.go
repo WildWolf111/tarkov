@@ -12,12 +12,12 @@ type StocRepository struct {
 }
 
 var (
-	tablerepository string = "stocs"
+	tablestocs string = "stocs"
 )
 
 //For Post request
 func (st *StocRepository) Create(a *models.Stocs) (*models.Stocs, error) {
-	query := fmt.Sprintf("INSERT INTO %s (id,company_sender_id, company_recipient_id, product_id, quantity, warehouse_cell_id, gtd_id) VALUES ($1, $2, $3,$4,$5,$6,$7) RETURNING id", tablecompanies)
+	query := fmt.Sprintf("INSERT INTO %s (id,company_sender_id, company_recipient_id, product_id, quantity, warehouse_cell_id, gtd_id) VALUES ($1, $2, $3,$4,$5,$6,$7) RETURNING id", tablestocs)
 	if err := st.store.db.QueryRow(query, a.ID, a.Company_sender_id, a.Company_recipient_id, a.Product_id, a.Quantity, a.Warehouse_cell_id, a.GTD_id).Scan(&a.ID); err != nil {
 		return nil, err
 	}
@@ -26,8 +26,8 @@ func (st *StocRepository) Create(a *models.Stocs) (*models.Stocs, error) {
 
 // For Put request
 
-func (st *StocRepository) Update(a *models.Stocs) (*models.Stocs, error) {
-	query := fmt.Sprintf("INSERT INTO %s (id,company_sender_id, company_recipient_id, product_id, quantity, warehouse_cell_id, gtd_id) VALUES ($1, $2, $3,$4,$5,$6,$7) WHERE id=$1 RETURNING id", tablecompanies)
+func (st *StocRepository) UpdateStocById(a *models.Stocs) (*models.Stocs, error) {
+	query := fmt.Sprintf("INSERT INTO %s (id,company_sender_id, company_recipient_id, product_id, quantity, warehouse_cell_id, gtd_id) VALUES ($1, $2, $3,$4,$5,$6,$7) WHERE id=$1 RETURNING id", tablestocs)
 	if err := st.store.db.QueryRow(query, a.ID, a.Company_sender_id, a.Company_recipient_id, a.Product_id, a.Quantity, a.Warehouse_cell_id, a.GTD_id).Scan(&a.ID); err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func (st *StocRepository) DeleteById(id int) (*models.Stocs, error) {
 		return nil, err
 	}
 	if ok {
-		query := fmt.Sprintf("delete from %s where id=$1", tableStocs)
+		query := fmt.Sprintf("delete from %s where id=$1", tablestocs)
 		_, err = st.store.db.Exec(query, id)
 		if err != nil {
 			return nil, err
@@ -73,7 +73,7 @@ func (st *StocRepository) FindStocById(id int) (*models.Stocs, bool, error) {
 
 //Get all request and helper for FindByID
 func (st *StocRepository) SelectAll() ([]*models.Stocs, error) {
-	query := fmt.Sprintf("SELECT * FROM %s", tableStocs)
+	query := fmt.Sprintf("SELECT * FROM %s", tablestocs)
 	rows, err := st.store.db.Query(query)
 	if err != nil {
 		return nil, err

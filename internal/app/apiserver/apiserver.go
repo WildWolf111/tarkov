@@ -76,17 +76,15 @@ func (s *APIServer) configureRouter() {
 	s.router.HandleFunc(prefix+"/warehouses"+"/{id}", s.DeleteWarehouseById).Methods("DELETE")
 	s.router.HandleFunc(prefix+"/warehouses", s.PostWarhouse).Methods("POST")
 	s.router.HandleFunc(prefix+"/{id}", s.UpdateWarehouseById).Methods("PUT")
+
+	//router stocs
+
+	s.router.HandleFunc(prefix+"/stocs", s.GetAllStocs).Methods("GET")
+	s.router.HandleFunc(prefix+"/stocs"+"/{id}", s.GetStocById).Methods("GET")
+	s.router.HandleFunc(prefix+"/stocs"+"/{id}", s.DeleteStocById).Methods("DELETE")
+	s.router.HandleFunc(prefix+"/stocs", s.PostStocs).Methods("POST")
+	s.router.HandleFunc(prefix+"/{id}", s.UpdateStocById).Methods("PUT")
 }
-
-
-//router stocs
-
-s.router.HandleFunc(prefix+"/stocs", s.GetAllStocs).Methods("GET")
-s.router.HandleFunc(prefix+"/stocs",+"/{id}", s.GetStocById).Methods("GET")
-s.router.HandleFunc(prefix+"/stocs"+"/{id}", s.DeleteStocById).Methods("DELETE")
-s.router.HandleFunc(prefix+"/stocs", s.PostStoc).Methods("POST")
-s.router.HandleFunc(prefix+"/{id}", s.UpdateStocById).Methods("PUT")
-
 
 //configureStore method
 func (s *APIServer) configureStore() error {

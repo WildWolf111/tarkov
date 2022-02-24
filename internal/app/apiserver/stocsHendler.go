@@ -25,14 +25,14 @@ func (api *APIServer) GetAllStocs(writer http.ResponseWriter, req *http.Request)
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	api.logger.Info("Get All Stocs GET /companies")
+	api.logger.Info("Get All Stocs GET /stocs")
 	writer.WriteHeader(http.StatusOK)
 	json.NewEncoder(writer).Encode(stoc)
 }
 
 func (api *APIServer) PostStocs(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Post Stocs POST /companies")
+	api.logger.Info("Post Stocs POST /stocs")
 	var stoc models.Stocs
 	err := json.NewDecoder(req.Body).Decode(&stoc)
 	if err != nil {
@@ -110,7 +110,7 @@ func (api *APIServer) GetStocById(writer http.ResponseWriter, req *http.Request)
 
 func (api *APIServer) DeleteStocById(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Delete Stoc by Id DELETE /api/v1/articles/{id}")
+	api.logger.Info("Delete Stoc by Id DELETE /api/v1/stocs/{id}")
 	id, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		api.logger.Info("Troubles while parsing {id} param:", err)
@@ -188,7 +188,7 @@ func (api *APIServer) UpdateStocById(writer http.ResponseWriter, request *http.R
 		return
 	}
 
-	var newStoc models.Warehouses
+	var newStoc models.Stocs
 
 	err = json.NewDecoder(request.Body).Decode(&newStoc)
 	if err != nil {
@@ -204,7 +204,7 @@ func (api *APIServer) UpdateStocById(writer http.ResponseWriter, request *http.R
 	newStoc.ID = id
 	a, err := api.store.Stoc().UpdateStocById(&newStoc)
 	if err != nil {
-		api.logger.Info("Troubles while connections to the company database:", err)
+		api.logger.Info("Troubles while connections to the stoc database:", err)
 		msg := Message{
 			StatusCode: 501,
 			Message:    "We have some troubles to accessing database. Try again",
