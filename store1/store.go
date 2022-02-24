@@ -15,6 +15,7 @@ type Store struct {
 	articleRepository   *ArticleRepository
 	companyRepository   *CompanyRepository
 	warehouserepository *WarehouseRepository
+	stocsRepository     *StocRepository
 }
 
 // Constructor for store
@@ -87,4 +88,15 @@ func (s *Store) Warehouse() *WarehouseRepository {
 		store: s,
 	}
 	return s.warehouserepository
+}
+
+//Stoc for StocsRepo
+func (s *Store) Stoc() *StocRepository {
+	if s.stocsRepository != nil {
+		return s.stocsRepository
+	}
+	s.stocsRepository = &StocRepository{
+		store: s,
+	}
+	return s.stocsRepository
 }

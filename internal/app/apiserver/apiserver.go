@@ -78,6 +78,16 @@ func (s *APIServer) configureRouter() {
 	s.router.HandleFunc(prefix+"/{id}", s.UpdateWarehouseById).Methods("PUT")
 }
 
+
+//router stocs
+
+s.router.HandleFunc(prefix+"/stocs", s.GetAllStocs).Methods("GET")
+s.router.HandleFunc(prefix+"/stocs",+"/{id}", s.GetStocById).Methods("GET")
+s.router.HandleFunc(prefix+"/stocs"+"/{id}", s.DeleteStocById).Methods("DELETE")
+s.router.HandleFunc(prefix+"/stocs", s.PostStoc).Methods("POST")
+s.router.HandleFunc(prefix+"/{id}", s.UpdateStocById).Methods("PUT")
+
+
 //configureStore method
 func (s *APIServer) configureStore() error {
 	st := store.New(s.config.Store)
