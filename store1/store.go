@@ -14,8 +14,8 @@ type Store struct {
 	userRepository      *UserRepository
 	articleRepository   *ArticleRepository
 	companyRepository   *CompanyRepository
-	warehouserepository *WarehouseRepository
-	stocsRepository     *StocRepository
+	warehouseRepository *WarehouseRepository
+	stocRepository      *StocRepository
 }
 
 // Constructor for store
@@ -82,21 +82,21 @@ func (s *Store) Company() *CompanyRepository {
 //Public for WarehouseRepo
 func (s *Store) Warehouse() *WarehouseRepository {
 	if s.companyRepository != nil {
-		return s.warehouserepository
+		return s.warehouseRepository
 	}
-	s.warehouserepository = &WarehouseRepository{
+	s.warehouseRepository = &WarehouseRepository{
 		store: s,
 	}
-	return s.warehouserepository
+	return s.warehouseRepository
 }
 
 //Stoc for StocsRepo
 func (s *Store) Stoc() *StocRepository {
-	if s.stocsRepository != nil {
-		return s.stocsRepository
+	if s.stocRepository != nil {
+		return s.stocRepository
 	}
-	s.stocsRepository = &StocRepository{
+	s.stocRepository = &StocRepository{
 		store: s,
 	}
-	return s.stocsRepository
+	return s.stocRepository
 }

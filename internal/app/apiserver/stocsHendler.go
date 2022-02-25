@@ -14,11 +14,12 @@ import (
 func (api *APIServer) GetAllStocs(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
 	stoc, err := api.store.Stoc().SelectAll()
+
 	if err != nil {
 		api.logger.Info(err)
 		msg := Message{
 			StatusCode: 501,
-			Message:    "We have some troubles to accessing companies in database. Try later",
+			Message:    "We have some troubles to accessing stocs in database. Try later",
 			IsError:    true,
 		}
 		writer.WriteHeader(501)
@@ -49,7 +50,7 @@ func (api *APIServer) PostStocs(writer http.ResponseWriter, req *http.Request) {
 	fmt.Println(stoc)
 	a, err := api.store.Stoc().Create(&stoc)
 	if err != nil {
-		api.logger.Info("Troubles while connections to the company database:", err)
+		api.logger.Info("Troubles while connections to the stoc database:", err)
 		msg := Message{
 			StatusCode: 501,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -79,9 +80,9 @@ func (api *APIServer) GetStocById(writer http.ResponseWriter, req *http.Request)
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	article, ok, err := api.store.Stoc().FindStocById(id)
+	stoc, ok, err := api.store.Stoc().FindStocById(id)
 	if err != nil {
-		api.logger.Info("Troubles while accessing database table (companies) with id. err:", err)
+		api.logger.Info("Troubles while accessing database table (stocs) with id. err:", err)
 		msg := Message{
 			StatusCode: 500,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -92,10 +93,10 @@ func (api *APIServer) GetStocById(writer http.ResponseWriter, req *http.Request)
 		return
 	}
 	if !ok {
-		api.logger.Info("Can not find article with that ID in database")
+		api.logger.Info("Can not find stoc with that ID in database")
 		msg := Message{
 			StatusCode: 404,
-			Message:    "Article with that ID does not exists in database.",
+			Message:    "Stoc with that ID does not exists in database.",
 			IsError:    true,
 		}
 
@@ -104,7 +105,7 @@ func (api *APIServer) GetStocById(writer http.ResponseWriter, req *http.Request)
 		return
 	}
 	writer.WriteHeader(200)
-	json.NewEncoder(writer).Encode(article)
+	json.NewEncoder(writer).Encode(stoc)
 
 }
 
@@ -138,10 +139,10 @@ func (api *APIServer) DeleteStocById(writer http.ResponseWriter, req *http.Reque
 	}
 
 	if !ok {
-		api.logger.Info("Can not find company with that ID in database")
+		api.logger.Info("Can not find stoc with that ID in database")
 		msg := Message{
 			StatusCode: 404,
-			Message:    "Company with that ID does not exists in database.",
+			Message:    "stoc with that ID does not exists in database.",
 			IsError:    true,
 		}
 
@@ -150,7 +151,7 @@ func (api *APIServer) DeleteStocById(writer http.ResponseWriter, req *http.Reque
 		return
 	}
 
-	_, err = api.store.Company().DeleteById(id)
+	_, err = api.store.Stoc().DeleteById(id)
 	if err != nil {
 		api.logger.Info("Troubles while deleting database elemnt from table (stocs) with id. err:", err)
 		msg := Message{

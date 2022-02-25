@@ -1,1 +1,0 @@
-ALTER TABLE "warehouses" DROP COLUMN 

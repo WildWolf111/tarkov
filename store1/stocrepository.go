@@ -18,6 +18,7 @@ var (
 //For Post request
 func (st *StocRepository) Create(a *models.Stocs) (*models.Stocs, error) {
 	query := fmt.Sprintf("INSERT INTO %s (id,company_sender_id, company_recipient_id, product_id, quantity, warehouse_cell_id, gtd_id) VALUES ($1, $2, $3,$4,$5,$6,$7) RETURNING id", tablestocs)
+	log.Println(query)
 	if err := st.store.db.QueryRow(query, a.ID, a.Company_sender_id, a.Company_recipient_id, a.Product_id, a.Quantity, a.Warehouse_cell_id, a.GTD_id).Scan(&a.ID); err != nil {
 		return nil, err
 	}
@@ -27,7 +28,7 @@ func (st *StocRepository) Create(a *models.Stocs) (*models.Stocs, error) {
 // For Put request
 
 func (st *StocRepository) UpdateStocById(a *models.Stocs) (*models.Stocs, error) {
-	query := fmt.Sprintf("INSERT INTO %s (id,company_sender_id, company_recipient_id, product_id, quantity, warehouse_cell_id, gtd_id) VALUES ($1, $2, $3,$4,$5,$6,$7) WHERE id=$1 RETURNING id", tablestocs)
+	query := fmt.Sprintf("UPDATE %s SET (id, company_sender_id, company_recipient_id, product_id, quantity, warehouse_cell_id, gtd_id) VALUES ($1, $2, $3,$4,$5,$6,&7) WHERE id=$1 RETURNING id", tablestocs)
 	if err := st.store.db.QueryRow(query, a.ID, a.Company_sender_id, a.Company_recipient_id, a.Product_id, a.Quantity, a.Warehouse_cell_id, a.GTD_id).Scan(&a.ID); err != nil {
 		return nil, err
 	}
@@ -74,7 +75,9 @@ func (st *StocRepository) FindStocById(id int) (*models.Stocs, bool, error) {
 //Get all request and helper for FindByID
 func (st *StocRepository) SelectAll() ([]*models.Stocs, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", tablestocs)
+	log.Println(query)
 	rows, err := st.store.db.Query(query)
+
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +85,8 @@ func (st *StocRepository) SelectAll() ([]*models.Stocs, error) {
 	stocs := make([]*models.Stocs, 0)
 	for rows.Next() {
 		a := models.Stocs{}
-		err := rows.Scan(&a.ID, a.Company_sender_id, a.Company_recipient_id, a.Product_id, a.Quantity, a.Warehouse_cell_id, a.GTD_id)
+		log.Println(rows)
+		err := rows.Scan(&a.ID, &a.Company_sender_id, &a.Company_recipient_id, &a.Product_id, &a.Quantity, &a.Warehouse_cell_id, &a.GTD_id)
 		if err != nil {
 			log.Println(err)
 			continue

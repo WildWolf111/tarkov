@@ -80,6 +80,39 @@ func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
 	warehouses := make([]*models.Warehouses, 0)
 	for rows.Next() {
 		a := models.Warehouses{}
+
+		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.Company_id, &a.Address)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		w, ok, err := wa.store.Company().GetCompanyById(a.Company_id)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		if !ok {
+			log.Printf("Company with id %d not found", a.Company_id)
+		}
+		a.Companies = w
+		warehouses = append(warehouses, &a)
+	}
+	return warehouses, nil
+}
+
+//Get all request and helper for FindByID
+func (wa *WarehouseRepository) GetWarehouseByCompanyId(id int) ([]*models.Warehouses, bool, error) {
+	query := fmt.Sprintf("SELECT * FROM %s WHERE company_id = $1", tablewarehouse)
+	log.Println(query)
+	rows, err := wa.store.db.Query(query, id)
+	if err != nil {
+		return nil, false, err
+	}
+	defer rows.Close()
+	warehouses := make([]*models.Warehouses, 0)
+	for rows.Next() {
+		a := models.Warehouses{}
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.Company_id, &a.Address)
 		if err != nil {
 			log.Println(err)
@@ -87,5 +120,8 @@ func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
 		}
 		warehouses = append(warehouses, &a)
 	}
-	return warehouses, nil
+	if len(warehouses) == 0 {
+		return warehouses, false, nil
+	}
+	return warehouses, true, nil
 }

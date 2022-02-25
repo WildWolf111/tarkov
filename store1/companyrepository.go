@@ -87,7 +87,54 @@ func (co *CompanyRepository) SelectAll() ([]*models.Companies, error) {
 			log.Println(err)
 			continue
 		}
+
+		w, ok, err := co.store.Warehouse().GetWarehouseByCompanyId(a.ID)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		if !ok {
+			log.Printf("Company with id %d not found", a.ID)
+		}
+		a.Warehouses = w
+
 		companies = append(companies, &a)
 	}
 	return companies, nil
+}
+
+//Get all request and helper for FindByID
+func (co *CompanyRepository) GetCompanyById(id int) ([]*models.Companies, bool, error) {
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", tablecompanies)
+	rows, err := co.store.db.Query(query, id)
+	if err != nil {
+		return nil, false, err
+	}
+	defer rows.Close()
+	companies := make([]*models.Companies, 0)
+	for rows.Next() {
+		a := models.Companies{}
+
+		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.INN, &a.KPP)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		var ok bool
+		a.Warehouses, ok, err = co.store.Warehouse().GetWarehouseByCompanyId(a.ID)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		if !ok {
+			log.Printf("Company warehouse with id %d not found", a.ID)
+			continue
+		}
+
+		companies = append(companies, &a)
+	}
+	if len(companies) == 0 {
+		return companies, false, nil
+	}
+	return companies, true, nil
 }
