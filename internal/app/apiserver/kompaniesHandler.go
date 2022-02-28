@@ -11,9 +11,9 @@ import (
 	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
 )
 
-func (api *APIServer) GetAllKompany(writer http.ResponseWriter, req *http.Request) {
+func (api *APIServer) GetAllWarehouse(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	company, err := api.store.Kompany().SelectAll()
+	warehouse, err := api.store.Warehouse().SelectAll()
 	if err != nil {
 		api.logger.Info(err)
 		msg := Message{
@@ -25,16 +25,16 @@ func (api *APIServer) GetAllKompany(writer http.ResponseWriter, req *http.Reques
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	api.logger.Info("Get All Companies GET /companies")
+	api.logger.Info("Get All Warehouses GET /warehouses")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(company)
+	json.NewEncoder(writer).Encode(warehouse)
 }
 
-func (api *APIServer) Postkompany(writer http.ResponseWriter, req *http.Request) {
+func (api *APIServer) PostWarhouse(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Post Kompany POST /kompanies")
-	var company models.Companies
-	err := json.NewDecoder(req.Body).Decode(&company)
+	api.logger.Info("Post Warehouse POST /warehouses")
+	var warehouse models.Warehouses
+	err := json.NewDecoder(req.Body).Decode(&warehouse)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
 		msg := Message{
@@ -46,10 +46,10 @@ func (api *APIServer) Postkompany(writer http.ResponseWriter, req *http.Request)
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	fmt.Println(company)
-	a, err := api.store.Kompany().Create(&company)
+	fmt.Println(warehouse)
+	a, err := api.store.Warehouse().Create(&warehouse)
 	if err != nil {
-		api.logger.Info("Troubles while connections to the company database:", err)
+		api.logger.Info("Troubles while connections to the warehouse database:", err)
 		msg := Message{
 			StatusCode: 501,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -64,9 +64,9 @@ func (api *APIServer) Postkompany(writer http.ResponseWriter, req *http.Request)
 
 }
 
-func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Request) {
+func (api *APIServer) GetWarehouseById(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Get Company by ID /api/v1/companies/{id}")
+	api.logger.Info("Get Warehouse by ID /api/v1/warehouses/{id}")
 	id, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		api.logger.Info("Troubles while parsing {id} param:", err)
@@ -79,9 +79,9 @@ func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Reque
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	article, ok, err := api.store.Company().FindCompanyById(id)
+	article, ok, err := api.store.Warehouse().FindWarehouseById(id)
 	if err != nil {
-		api.logger.Info("Troubles while accessing database table (companies) with id. err:", err)
+		api.logger.Info("Troubles while accessing database table (warehouse) with id. err:", err)
 		msg := Message{
 			StatusCode: 500,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -108,9 +108,9 @@ func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Reque
 
 }
 
-func (api *APIServer) DeleteCompanyById(writer http.ResponseWriter, req *http.Request) {
+func (api *APIServer) DeleteWarehouseById(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Delete Company by Id DELETE /api/v1/articles/{id}")
+	api.logger.Info("Delete Warehouse by Id DELETE /api/v1/warehouses/{id}")
 	id, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		api.logger.Info("Troubles while parsing {id} param:", err)
@@ -124,7 +124,7 @@ func (api *APIServer) DeleteCompanyById(writer http.ResponseWriter, req *http.Re
 		return
 	}
 
-	_, ok, err := api.store.Company().FindCompanyById(id)
+	_, ok, err := api.store.Warehouse().FindWarehouseById(id)
 	if err != nil {
 		api.logger.Info("Troubles while accessing database table (articles) with id. err:", err)
 		msg := Message{
@@ -150,7 +150,7 @@ func (api *APIServer) DeleteCompanyById(writer http.ResponseWriter, req *http.Re
 		return
 	}
 
-	_, err = api.store.Company().DeleteById(id)
+	_, err = api.store.Warehouse().DeleteById(id)
 	if err != nil {
 		api.logger.Info("Troubles while deleting database elemnt from table (articles) with id. err:", err)
 		msg := Message{
@@ -165,16 +165,16 @@ func (api *APIServer) DeleteCompanyById(writer http.ResponseWriter, req *http.Re
 	writer.WriteHeader(202)
 	msg := Message{
 		StatusCode: 202,
-		Message:    fmt.Sprintf("Company with ID %d successfully deleted.", id),
+		Message:    fmt.Sprintf("Warehouses with ID %d successfully deleted.", id),
 		IsError:    false,
 	}
 	json.NewEncoder(writer).Encode(msg)
 }
 
 //warehouse update
-func (api *APIServer) UpdateCompanyById(writer http.ResponseWriter, request *http.Request) {
+func (api *APIServer) UpdateWarehouseById(writer http.ResponseWriter, request *http.Request) {
 	initHeaders(writer)
-	log.Println("Updating Company ...")
+	log.Println("Updating Warehouse ...")
 	id, err := strconv.Atoi(mux.Vars(request)["id"])
 	if err != nil {
 		log.Println("error while parsing happend:", err)
@@ -188,9 +188,9 @@ func (api *APIServer) UpdateCompanyById(writer http.ResponseWriter, request *htt
 		return
 	}
 
-	var newCompany models.Warehouses
+	var newWarehouse models.Warehouses
 
-	err = json.NewDecoder(request.Body).Decode(&newCompany)
+	err = json.NewDecoder(request.Body).Decode(&newWarehouse)
 	if err != nil {
 		msg := Message{
 			StatusCode: 400,
@@ -201,8 +201,8 @@ func (api *APIServer) UpdateCompanyById(writer http.ResponseWriter, request *htt
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	newCompany.ID = id
-	a, err := api.store.Warehouse().UpdateWarehouseById(&newCompany)
+	newWarehouse.ID = id
+	a, err := api.store.Warehouse().UpdateWarehouseById(&newWarehouse)
 	if err != nil {
 		api.logger.Info("Troubles while connections to the company database:", err)
 		msg := Message{
