@@ -12,12 +12,12 @@ type KompanyRepository struct {
 }
 
 var (
-	tablekompany string = "kompanies"
+	tablekompany string = "kompany"
 )
 
 //For Post request
 func (ko *KompanyRepository) Create(a *models.Kompany) (*models.Kompany, error) {
-	query := fmt.Sprintf("UPDATE %s SET (id, name, slug, inn, kpp) VALUES ($1, $2, $3,$4,$5)WHERE id=$1 RETURNING id", tablekompany)
+	query := fmt.Sprintf("INSERT INTO %s (id, name, slug, inn, kpp) VALUES ($1, $2, $3,$4,$5) RETURNING id", tablekompany)
 	if err := ko.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.INN, a.KPP).Scan(&a.ID); err != nil {
 		return nil, err
 	}
