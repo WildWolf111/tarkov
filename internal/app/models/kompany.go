@@ -1,7 +1,7 @@
 package models
 
 //Article models...
-type Kompanies struct {
+type Kompany struct {
 	ID         int           `json:"id"`
 	Name       string        `json:"name"`
 	Slug       string        `json:"slug"`

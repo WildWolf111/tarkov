@@ -87,7 +87,7 @@ func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
 			continue
 		}
 
-		w, ok, err := wa.store.Company().GetCompanyById(a.Company_id)
+		w, ok, err := wa.store.Kompany().GetKompanyById(a.Company_id)
 		if err != nil {
 			log.Println(err)
 			continue
@@ -95,7 +95,7 @@ func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
 		if !ok {
 			log.Printf("Company with id %d not found", a.Company_id)
 		}
-		a.Companies = w
+		a.Kompany = w
 		warehouses = append(warehouses, &a)
 	}
 	return warehouses, nil
