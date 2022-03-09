@@ -7,5 +7,5 @@ type Warehouses struct {
 	Slug       string `json:"slug"`
 	Company_id int
 	Address    string     `json:"address"`
-	Kompany    []*Kompany `json:"kompanies"`
+	Company    []*Company `json:"kompanies"`
 }

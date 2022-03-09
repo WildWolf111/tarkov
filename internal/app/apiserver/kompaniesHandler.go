@@ -11,10 +11,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (api *APIServer) GetAllKompany(writer http.ResponseWriter, req *http.Request) {
+func (api *APIServer) GetAllCompany(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
 
-	kompany, err := api.store.Kompany().SelectAll()
+	company, err := api.store.Company().SelectAll()
 	if err != nil {
 		api.logger.Info(err)
 		msg := Message{
@@ -26,16 +26,16 @@ func (api *APIServer) GetAllKompany(writer http.ResponseWriter, req *http.Reques
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	api.logger.Info("Get All Kompany GET /kompanies")
+	api.logger.Info("Get All Company GET /companies")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(kompany)
+	json.NewEncoder(writer).Encode(company)
 }
 
-func (api *APIServer) PostKompany(writer http.ResponseWriter, req *http.Request) {
+func (api *APIServer) PostCompany(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Post Kompany POST /warehouses")
-	var Kompany models.Kompany
-	err := json.NewDecoder(req.Body).Decode(&Kompany)
+	api.logger.Info("Post Company POST /warehouses")
+	var Company models.Company
+	err := json.NewDecoder(req.Body).Decode(&Company)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
 		msg := Message{
@@ -47,10 +47,10 @@ func (api *APIServer) PostKompany(writer http.ResponseWriter, req *http.Request)
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	fmt.Println(Kompany)
-	a, err := api.store.Kompany().Create(&Kompany)
+	fmt.Println(Company)
+	a, err := api.store.Company().Create(&Company)
 	if err != nil {
-		api.logger.Info("Troubles while connections to the Kompany database:", err)
+		api.logger.Info("Troubles while connections to the Company database:", err)
 		msg := Message{
 			StatusCode: 501,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -65,9 +65,9 @@ func (api *APIServer) PostKompany(writer http.ResponseWriter, req *http.Request)
 
 }
 
-func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Request) {
+func (api *APIServer) GetCompanyById(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Get Kompany by ID /api/v1/warehouses/{id}")
+	api.logger.Info("Get Company by ID /api/v1/warehouses/{id}")
 	id, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		api.logger.Info("Troubles while parsing {id} param:", err)
@@ -80,9 +80,9 @@ func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Reque
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	kompany, ok, err := api.store.Kompany().FindKompanyById(id)
+	company, ok, err := api.store.Company().FindCompanyById(id)
 	if err != nil {
-		api.logger.Info("Troubles while accessing database table (Kompany) with id. err:", err)
+		api.logger.Info("Troubles while accessing database table (Company) with id. err:", err)
 		msg := Message{
 			StatusCode: 500,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -93,10 +93,10 @@ func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Reque
 		return
 	}
 	if !ok {
-		api.logger.Info("Can not find kompany with that ID in database")
+		api.logger.Info("Can not find company with that ID in database")
 		msg := Message{
 			StatusCode: 404,
-			Message:    "Kompany with that ID does not exists in database.",
+			Message:    "company with that ID does not exists in database.",
 			IsError:    true,
 		}
 
@@ -105,13 +105,13 @@ func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Reque
 		return
 	}
 	writer.WriteHeader(200)
-	json.NewEncoder(writer).Encode(kompany)
+	json.NewEncoder(writer).Encode(company)
 
 }
 
-func (api *APIServer) DeleteKompanyById(writer http.ResponseWriter, req *http.Request) {
+func (api *APIServer) DeleteCompanyById(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Delete Kompany by Id DELETE /api/v1/warehouses/{id}")
+	api.logger.Info("Delete Company by Id DELETE /api/v1/warehouses/{id}")
 	id, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		api.logger.Info("Troubles while parsing {id} param:", err)
@@ -125,9 +125,9 @@ func (api *APIServer) DeleteKompanyById(writer http.ResponseWriter, req *http.Re
 		return
 	}
 
-	_, ok, err := api.store.Kompany().FindKompanyById(id)
+	_, ok, err := api.store.Company().FindCompanyById(id)
 	if err != nil {
-		api.logger.Info("Troubles while accessing database table (kompanies) with id. err:", err)
+		api.logger.Info("Troubles while accessing database table (companies) with id. err:", err)
 		msg := Message{
 			StatusCode: 500,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -151,9 +151,9 @@ func (api *APIServer) DeleteKompanyById(writer http.ResponseWriter, req *http.Re
 		return
 	}
 
-	_, err = api.store.Kompany().DeleteById(id)
+	_, err = api.store.Company().DeleteById(id)
 	if err != nil {
-		api.logger.Info("Troubles while deleting database elemnt from table (kompanies) with id. err:", err)
+		api.logger.Info("Troubles while deleting database elemnt from table (Companies) with id. err:", err)
 		msg := Message{
 			StatusCode: 501,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -172,10 +172,10 @@ func (api *APIServer) DeleteKompanyById(writer http.ResponseWriter, req *http.Re
 	json.NewEncoder(writer).Encode(msg)
 }
 
-//Kompany update
-func (api *APIServer) UpdateKompanyById(writer http.ResponseWriter, request *http.Request) {
+//Company update
+func (api *APIServer) UpdateCompanyById(writer http.ResponseWriter, request *http.Request) {
 	initHeaders(writer)
-	log.Println("Updating Kompany ...")
+	log.Println("Updating Company ...")
 	id, err := strconv.Atoi(mux.Vars(request)["id"])
 	if err != nil {
 		log.Println("error while parsing happend:", err)
@@ -189,9 +189,9 @@ func (api *APIServer) UpdateKompanyById(writer http.ResponseWriter, request *htt
 		return
 	}
 
-	var newKompany models.Kompany
+	var newCompany models.Company
 
-	err = json.NewDecoder(request.Body).Decode(&newKompany)
+	err = json.NewDecoder(request.Body).Decode(&newCompany)
 	if err != nil {
 		msg := Message{
 			StatusCode: 400,
@@ -202,8 +202,8 @@ func (api *APIServer) UpdateKompanyById(writer http.ResponseWriter, request *htt
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	newKompany.ID = id
-	a, err := api.store.Kompany().UpdateKompanyById(&newKompany)
+	newCompany.ID = id
+	a, err := api.store.Company().UpdateCompanyById(&newCompany)
 	if err != nil {
 		api.logger.Info("Troubles while connections to the company database:", err)
 		msg := Message{
