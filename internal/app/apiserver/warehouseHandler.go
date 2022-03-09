@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/WildWolf111/StandarWebSrver2/internal/app/models"
 	"github.com/gorilla/mux"
-	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
 )
 
 func (api *APIServer) GetAllWarehouse(writer http.ResponseWriter, req *http.Request) {
@@ -79,7 +79,7 @@ func (api *APIServer) GetWarehouseById(writer http.ResponseWriter, req *http.Req
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	article, ok, err := api.store.Warehouse().FindWarehouseById(id)
+	warehouse, ok, err := api.store.Warehouse().FindWarehouseById(id)
 	if err != nil {
 		api.logger.Info("Troubles while accessing database table (warehouse) with id. err:", err)
 		msg := Message{
@@ -104,7 +104,7 @@ func (api *APIServer) GetWarehouseById(writer http.ResponseWriter, req *http.Req
 		return
 	}
 	writer.WriteHeader(200)
-	json.NewEncoder(writer).Encode(article)
+	json.NewEncoder(writer).Encode(warehouse)
 
 }
 

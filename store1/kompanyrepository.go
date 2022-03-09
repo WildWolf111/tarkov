@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
+	"github.com/WildWolf111/StandarWebSrver2/internal/app/models"
 )
 
 type KompanyRepository struct {
@@ -17,8 +17,8 @@ var (
 
 //For Post request
 func (ko *KompanyRepository) Create(a *models.Kompany) (*models.Kompany, error) {
-	query := fmt.Sprintf("INSERT INTO %s (id, name, slug, inn, kpp) VALUES ($1, $2, $3,$4,$5) RETURNING id", tablekompany)
-	if err := ko.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.INN, a.KPP).Scan(&a.ID); err != nil {
+	query := fmt.Sprintf("INSERT INTO %s (name, slug, inn, kpp) VALUES ($1, $2, $3,$4) RETURNING id", tablekompany)
+	if err := ko.store.db.QueryRow(query, a.Name, a.Slug, a.INN, a.KPP).Scan(&a.ID); err != nil {
 		return nil, err
 	}
 	return a, nil
@@ -26,7 +26,7 @@ func (ko *KompanyRepository) Create(a *models.Kompany) (*models.Kompany, error) 
 
 //For Update request
 func (ko *KompanyRepository) UpdateKompanyById(a *models.Kompany) (*models.Kompany, error) {
-	query := fmt.Sprintf("UPDATE %s SET (id, name, slug, inn, kpp) VALUES ($1, $2, $3,$4,$5)WHERE id=$1 RETURNING id", tablekompany)
+	query := fmt.Sprintf("UPDATE %s SET (name, slug, inn, kpp) VALUES ($2, $3,$4,$5)WHERE id=$1 RETURNING id", tablekompany)
 	if err := ko.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.INN, a.KPP).Scan(&a.ID); err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (ko *KompanyRepository) FindKompanyById(id int) (*models.Kompany, bool, err
 
 }
 
-//Get all request and helper for FindByID
+//Get all request
 func (ko *KompanyRepository) SelectAll() ([]*models.Kompany, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", tablekompany)
 	rows, err := ko.store.db.Query(query)
@@ -86,23 +86,23 @@ func (ko *KompanyRepository) SelectAll() ([]*models.Kompany, error) {
 			log.Println(err)
 			continue
 		}
-
-		w, ok, err := ko.store.Warehouse().GetWarehouseByCompanyId(a.ID)
-		if err != nil {
-			log.Println(err)
-			continue
-		}
-		if !ok {
-			log.Printf("Kompany with id %d not found", a.ID)
-		}
-		a.Warehouses = w
-
+		/*
+			w, ok, err := ko.store.Warehouse().GetWarehouseByCompanyId(a.ID)
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+			if !ok {
+				log.Printf("Kompany with id %d not found", a.ID)
+			}
+			a.Warehouses = w
+		*/
 		kompanies = append(kompanies, &a)
 	}
 	return kompanies, nil
 }
 
-//Get all request and helper for FindByID
+//Get  request dByID
 func (ko *KompanyRepository) GetKompanyById(id int) ([]*models.Kompany, bool, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", tablekompany)
 	rows, err := ko.store.db.Query(query, id)

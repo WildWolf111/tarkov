@@ -3,9 +3,9 @@ package apiserver
 import (
 	"net/http"
 
+	store "github.com/WildWolf111/StandarWebSrver2/store1"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
-	store "github.com/vlasove/8.HandlerImpl2/store1"
 )
 
 var (
@@ -56,19 +56,6 @@ func (s *APIServer) configureLogger() error {
 
 //func for configure Router
 func (s *APIServer) configureRouter() {
-	s.router.HandleFunc(prefix+"/articles", s.GetAllArticles).Methods("GET")
-	s.router.HandleFunc(prefix+"/articles"+"/{id}", s.GetArticleById).Methods("GET")
-	s.router.HandleFunc(prefix+"/articles"+"/{id}", s.DeleteArticleById).Methods("DELETE")
-	s.router.HandleFunc(prefix+"/articles", s.PostArticle).Methods("POST")
-
-	s.router.HandleFunc(prefix+"/user/register", s.PostUserRegister).Methods("POST")
-
-	//router companies
-	s.router.HandleFunc(prefix+"/companies", s.GetAllCompany).Methods("GET")
-	s.router.HandleFunc(prefix+"/companies"+"/{id}", s.GetCompanyById).Methods("GET")
-	s.router.HandleFunc(prefix+"/companies"+"/{id}", s.DeleteCompanyById).Methods("DELETE")
-	s.router.HandleFunc(prefix+"/companies", s.PostCompany).Methods("POST")
-	s.router.HandleFunc(prefix+"/{id}", s.UpdateCompanyById).Methods("PUT")
 
 	//router warehouses
 	s.router.HandleFunc(prefix+"/warehouses", s.GetAllWarehouse).Methods("GET")

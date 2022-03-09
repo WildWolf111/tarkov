@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
+	"github.com/WildWolf111/StandarWebSrver2/internal/app/models"
 )
 
 type WarehouseRepository struct {
@@ -17,8 +17,8 @@ var (
 
 //For Post request
 func (wa *WarehouseRepository) Create(a *models.Warehouses) (*models.Warehouses, error) {
-	query := fmt.Sprintf("INSERT INTO %s (name, slug, company_id, address, id) VALUES ($1, $2, $3,$4,$5) RETURNING id", tablewarehouse)
-	if err := wa.store.db.QueryRow(query, a.Name, a.Slug, a.Company_id, a.Address, a.ID).Scan(&a.ID); err != nil {
+	query := fmt.Sprintf("INSERT INTO %s (name, slug, company_id, address) VALUES ($1, $2, $3,$4) RETURNING id", tablewarehouse)
+	if err := wa.store.db.QueryRow(query, a.Name, a.Slug, a.Company_id, a.Address).Scan(&a.ID); err != nil {
 		return nil, err
 	}
 	return a, nil
@@ -26,8 +26,8 @@ func (wa *WarehouseRepository) Create(a *models.Warehouses) (*models.Warehouses,
 
 //For Update request
 func (wa *WarehouseRepository) UpdateWarehouseById(a *models.Warehouses) (*models.Warehouses, error) {
-	query := fmt.Sprintf("UPDATE %s SET name=$1, slug=$2, company_id=$3, address=$4) WHERE id=$5 RETURNING id", tablewarehouse)
-	if err := wa.store.db.QueryRow(query, a.Name, a.Slug, a.Company_id, a.Address, a.ID).Scan(&a.ID); err != nil {
+	query := fmt.Sprintf("UPDATE %s SET (name, slug, company_id, address) VALUES ($2, $3,$4,$5) WHERE id=$1 RETURNING id", tablewarehouse)
+	if err := wa.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.Company_id, a.Address).Scan(&a.ID); err != nil {
 		return nil, err
 	}
 	return a, nil
@@ -71,7 +71,9 @@ func (wa *WarehouseRepository) FindWarehouseById(id int) (*models.Warehouses, bo
 
 //Get all request and helper for FindByID
 func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
+
 	query := fmt.Sprintf("SELECT * FROM %s", tablewarehouse)
+
 	rows, err := wa.store.db.Query(query)
 	if err != nil {
 		return nil, err
@@ -86,18 +88,21 @@ func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
 			log.Println(err)
 			continue
 		}
+		/*
+			w, ok, err := wa.store.Kompany().GetKompanyById(a.Company_id)
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+			if !ok {
+				log.Printf("Company with id %d not found", a.Company_id)
+			}
 
-		w, ok, err := wa.store.Kompany().GetKompanyById(a.Company_id)
-		if err != nil {
-			log.Println(err)
-			continue
-		}
-		if !ok {
-			log.Printf("Company with id %d not found", a.Company_id)
-		}
-		a.Kompany = w
+			a.Kompany = w
+		*/
 		warehouses = append(warehouses, &a)
 	}
+
 	return warehouses, nil
 }
 

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/WildWolf111/StandarWebSrver2/internal/app/models"
 	"github.com/gorilla/mux"
-	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
 )
 
 func (api *APIServer) GetAllStocs(writer http.ResponseWriter, req *http.Request) {

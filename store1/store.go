@@ -11,9 +11,6 @@ import (
 type Store struct {
 	config              *Config
 	db                  *sql.DB
-	userRepository      *UserRepository
-	articleRepository   *ArticleRepository
-	companyRepository   *CompanyRepository
 	warehouseRepository *WarehouseRepository
 	stocRepository      *StocRepository
 	kompanyRepository   *KompanyRepository
@@ -47,42 +44,9 @@ func (s *Store) Close() {
 	s.db.Close()
 }
 
-//Public for UserRepo
-func (s *Store) User() *UserRepository {
-	if s.userRepository != nil {
-		return s.userRepository
-	}
-	s.userRepository = &UserRepository{
-		store: s,
-	}
-	return s.userRepository
-}
-
-//Public for ArticleRepo
-func (s *Store) Article() *ArticleRepository {
-	if s.articleRepository != nil {
-		return s.articleRepository
-	}
-	s.articleRepository = &ArticleRepository{
-		store: s,
-	}
-	return s.articleRepository
-}
-
-//Public for CompanyRepo
-func (s *Store) Company() *CompanyRepository {
-	if s.companyRepository != nil {
-		return s.companyRepository
-	}
-	s.companyRepository = &CompanyRepository{
-		store: s,
-	}
-	return s.companyRepository
-}
-
 //Public for WarehouseRepo
 func (s *Store) Warehouse() *WarehouseRepository {
-	if s.companyRepository != nil {
+	if s.kompanyRepository != nil {
 		return s.warehouseRepository
 	}
 	s.warehouseRepository = &WarehouseRepository{

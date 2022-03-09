@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
+	"github.com/WildWolf111/StandarWebSrver2/internal/app/models"
 )
 
 type StocRepository struct {

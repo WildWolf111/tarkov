@@ -7,12 +7,13 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/WildWolf111/StandarWebSrver2/internal/app/models"
 	"github.com/gorilla/mux"
-	"github.com/vlasove/8.HandlerImpl2/internal/app/models"
 )
 
 func (api *APIServer) GetAllKompany(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
+
 	kompany, err := api.store.Kompany().SelectAll()
 	if err != nil {
 		api.logger.Info(err)
@@ -79,7 +80,7 @@ func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Reque
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	article, ok, err := api.store.Kompany().FindKompanyById(id)
+	kompany, ok, err := api.store.Kompany().FindKompanyById(id)
 	if err != nil {
 		api.logger.Info("Troubles while accessing database table (Kompany) with id. err:", err)
 		msg := Message{
@@ -92,10 +93,10 @@ func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Reque
 		return
 	}
 	if !ok {
-		api.logger.Info("Can not find article with that ID in database")
+		api.logger.Info("Can not find kompany with that ID in database")
 		msg := Message{
 			StatusCode: 404,
-			Message:    "Article with that ID does not exists in database.",
+			Message:    "Kompany with that ID does not exists in database.",
 			IsError:    true,
 		}
 
@@ -104,7 +105,7 @@ func (api *APIServer) GetKompanyById(writer http.ResponseWriter, req *http.Reque
 		return
 	}
 	writer.WriteHeader(200)
-	json.NewEncoder(writer).Encode(article)
+	json.NewEncoder(writer).Encode(kompany)
 
 }
 
@@ -126,7 +127,7 @@ func (api *APIServer) DeleteKompanyById(writer http.ResponseWriter, req *http.Re
 
 	_, ok, err := api.store.Kompany().FindKompanyById(id)
 	if err != nil {
-		api.logger.Info("Troubles while accessing database table (articles) with id. err:", err)
+		api.logger.Info("Troubles while accessing database table (kompanies) with id. err:", err)
 		msg := Message{
 			StatusCode: 500,
 			Message:    "We have some troubles to accessing database. Try again",
@@ -152,7 +153,7 @@ func (api *APIServer) DeleteKompanyById(writer http.ResponseWriter, req *http.Re
 
 	_, err = api.store.Kompany().DeleteById(id)
 	if err != nil {
-		api.logger.Info("Troubles while deleting database elemnt from table (articles) with id. err:", err)
+		api.logger.Info("Troubles while deleting database elemnt from table (kompanies) with id. err:", err)
 		msg := Message{
 			StatusCode: 501,
 			Message:    "We have some troubles to accessing database. Try again",
