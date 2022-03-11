@@ -1,0 +1,83 @@
+
+Select * FROM company_warehouses WHERE company_id = 2
+
+Select company.slug, warehouses.slug 
+from company_warehouses, company, warehouses
+Where company_warehouses.company_id=company.id 
+and company_warehouses.warehouses_id=warehouses.id 
+and company_warehouses.company_id = 2
+
+Select * from warehouses
+
+Select * from company
+
+
+
+
+
+
+
+
+
+
+
+10.03.2022
+
+
+select companies.slug as company_slug, warehouses.slug as 
+warehouse_slug, companies.id as company_id, warehouses.id as warehouse_id from
+companies inner join warehouses on companies.id = warehouses.company_id
+
+
+
+
+  SELECT companies.slug as company_slug, warehouses.slug as 
+warehouse_slug
+    FROM companies_warehouses
+    JOIN warehouses ON companies_warehouses.warehouses_id = warehouses.id
+    JOIN companies ON companies_warehouses.company_id = companies.id
+                  
+
+
+
+select companies.slug warehouse.slug from
+companies inner join warehouses on companies.id = warehouses.company_id
+
+
+
+
+select * from warehouses
+
+select * from companies
+
+UPDATE warehouses SET company_id = 2 WHERE id = 3
+
+insert into companies_warehouses values (2,2)
+
+select * from companies_warehouses
+
+
+
+
+
+
+
+
+
+func (cwo *CompanyRepository) GetAllCompanies_Warehouses(id int) (*models.Company, bool, error) {
+	companies_warehouses, err := cwo.SelectAll()
+	found := false
+	if err != nil {
+		return nil, found, err
+	}
+	var companies_warhousesFound *models.Companies_Warehouses
+	for _, a := range companies_warehouses {
+		if a.ID == id {
+			companies_warhousesFound = a
+			found = true
+		}
+	}
+
+	return companies_warhouses, found, nil
+
+}

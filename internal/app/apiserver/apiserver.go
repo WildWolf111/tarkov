@@ -73,12 +73,16 @@ func (s *APIServer) configureRouter() {
 	s.router.HandleFunc(prefix+"/{id}", s.UpdateStocById).Methods("PUT")
 
 	//router kompanies
-	s.router.HandleFunc(prefix+"/kompany", s.GetAllCompany).Methods("GET")
-	s.router.HandleFunc(prefix+"/kompany"+"/{id}", s.GetCompanyById).Methods("GET")
-	s.router.HandleFunc(prefix+"/kompany"+"/{id}", s.DeleteCompanyById).Methods("DELETE")
-	s.router.HandleFunc(prefix+"/kompany", s.PostCompany).Methods("POST")
+	s.router.HandleFunc(prefix+"/companies", s.GetAllCompany).Methods("GET")
+	s.router.HandleFunc(prefix+"/companies"+"/{id}", s.GetCompanyById).Methods("GET")
+	s.router.HandleFunc(prefix+"/companies"+"/{id}", s.DeleteCompanyById).Methods("DELETE")
+	s.router.HandleFunc(prefix+"/companies", s.PostCompany).Methods("POST")
 	s.router.HandleFunc(prefix+"/{id}", s.UpdateCompanyById).Methods("PUT")
 
+	//router companies_warhouses
+	s.router.HandleFunc(prefix+"/companies_warehouses", s.PostCompanies_Warehouses).Methods("POST")
+	//s.router.HandleFunc(prefix+"/companies_warehouses"+"/{id}", s.DeleteCompanies_Warehouses).Methods("DELETE")
+	s.router.HandleFunc(prefix+"/companies_warehouses", s.GetAllCompanies_Warehouses).Methods("GET")
 }
 
 //configureStore method

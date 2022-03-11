@@ -9,11 +9,12 @@ import (
 
 //Instance of store
 type Store struct {
-	config              *Config
-	db                  *sql.DB
-	warehouseRepository *WarehouseRepository
-	stocRepository      *StocRepository
-	CompanyRepository   *CompanyRepository
+	config                         *Config
+	db                             *sql.DB
+	warehouseRepository            *WarehouseRepository
+	stocRepository                 *StocRepository
+	CompanyRepository              *CompanyRepository
+	Companies_WarehousesRepository *Companies_WarehousesRepository
 }
 
 // Constructor for store
@@ -75,4 +76,15 @@ func (s *Store) Company() *CompanyRepository {
 		store: s,
 	}
 	return s.CompanyRepository
+}
+
+//Public for Companies_warehousesRepo
+func (s *Store) Companies_Warehouses() *Companies_WarehousesRepository {
+	if s.Companies_WarehousesRepository != nil {
+		return s.Companies_WarehousesRepository
+	}
+	s.Companies_WarehousesRepository = &Companies_WarehousesRepository{
+		store: s,
+	}
+	return s.Companies_WarehousesRepository
 }
