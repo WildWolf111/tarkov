@@ -27,7 +27,7 @@ func (cwo *Companies_WarehousesRepository) Create(a *models.Companies_Warehouses
 
 func (cwo *Companies_WarehousesRepository) SelectAllCompanies_Warehouses() ([]*models.Warehouses, error) {
 
-	query := fmt.Sprintf("SELECT %s.* FROM %s JOIN  %s ON  %s.id = %s.warehouses_id WHERE %s.company_id = id ", tablewarehouses, tablecompanies_warehouses, tablewarehouses, tablewarehouses, tablecompanies_warehouses, tablecompanies_warehouses)
+	query := fmt.Sprintf("SELECT %s.* FROM %s JOIN  %s ON  %s.id = %s.warehouses_id WHERE ", tablewarehouses, tablecompanies_warehouses, tablewarehouses, tablewarehouses, tablecompanies_warehouses)
 	log.Println(query)
 	rows, err := cwo.store.db.Query(query)
 	log.Println(rows)
@@ -49,3 +49,5 @@ func (cwo *Companies_WarehousesRepository) SelectAllCompanies_Warehouses() ([]*m
 	}
 	return warehouses, nil
 }
+
+//gresgtsrhgsrgh
