@@ -34,7 +34,9 @@ func (api *APIServer) GetAllCompany(writer http.ResponseWriter, req *http.Reques
 func (api *APIServer) PostCompany(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
 	api.logger.Info("Post Company POST /warehouses")
+
 	var Companies models.Company
+
 	err := json.NewDecoder(req.Body).Decode(&Companies)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")

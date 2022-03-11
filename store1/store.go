@@ -78,7 +78,7 @@ func (s *Store) Company() *CompanyRepository {
 	return s.CompanyRepository
 }
 
-//Public for Companies_warehousesRepo
+//Public for Companies_warehouses Repo
 func (s *Store) Companies_Warehouses() *Companies_WarehousesRepository {
 	if s.Companies_WarehousesRepository != nil {
 		return s.Companies_WarehousesRepository

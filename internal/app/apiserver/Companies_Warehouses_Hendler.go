@@ -4,10 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/WildWolf111/StandarWebSrver2/internal/app/models"
-	"github.com/gorilla/mux"
 )
 
 //post
@@ -57,10 +55,7 @@ func (api *APIServer) PostCompanies_Warehouses(writer http.ResponseWriter, req *
 func (api *APIServer) GetAllCompanies_Warehouses(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
 
-	id := mux.Vars(req)["id"]
-	fmt.Println(strconv.Atoi(id))
-
-	warehouses, err := api.store.Companies_Warehouses().SelectAllCompanies_Warehouses(id)
+	warehouses, err := api.store.Companies_Warehouses().SelectAllCompanies_Warehouses()
 	if err != nil {
 		api.logger.Info(err)
 		msg := Message{
