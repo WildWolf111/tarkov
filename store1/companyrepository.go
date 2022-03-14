@@ -26,7 +26,7 @@ func (co *CompanyRepository) Create(a *models.Company) (*models.Company, error) 
 
 //For Update request
 func (co *CompanyRepository) UpdateCompanyById(a *models.Company) (*models.Company, error) {
-	query := fmt.Sprintf("UPDATE %s SET (name, slug, inn, kpp) VALUES ($2, $3,$4,$5)WHERE id=$1 RETURNING id", tablecompanies)
+	query := fmt.Sprintf("UPDATE %s SET (name, slug, inn, kpp) VALUES ($2, $3,$4,$5) WHERE id=$1 RETURNING id", tablecompanies)
 	if err := co.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.INN, a.KPP).Scan(&a.ID); err != nil {
 		return nil, err
 	}

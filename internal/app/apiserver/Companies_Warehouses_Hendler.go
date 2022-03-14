@@ -55,7 +55,7 @@ func (api *APIServer) PostCompanies_Warehouses(writer http.ResponseWriter, req *
 func (api *APIServer) GetAllCompanies_Warehouses(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
 
-	warehouses, err := api.store.Companies_Warehouses().SelectAllCompanies_Warehouses()
+	Companies_Warehouses_Qwery, err := api.store.Companies_Warehouses().SelectAllCompanies_Warehouses()
 	if err != nil {
 		api.logger.Info(err)
 		msg := Message{
@@ -69,5 +69,5 @@ func (api *APIServer) GetAllCompanies_Warehouses(writer http.ResponseWriter, req
 	}
 	api.logger.Info("Get All Companies_warehouses GET /companies_warehouses")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(warehouses)
+	json.NewEncoder(writer).Encode(Companies_Warehouses_Qwery)
 }

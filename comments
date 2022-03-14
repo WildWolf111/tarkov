@@ -81,3 +81,27 @@ func (cwo *CompanyRepository) GetAllCompanies_Warehouses(id int) (*models.Compan
 	return companies_warhouses, found, nil
 
 }
+
+
+
+
+
+
+select companies.id, companies.slug, warehouses.id, warehouses.slug
+from companies join warehouses on companies.id = warehouses.company_id 
+
+
+select companies.id as companies_id, companies.slug as companies_slug, 
+warehouses.id as warehouses_id, warehouses.slug as warehouses_slug
+from companies_warehouses right join companies on companies.id = companies_warehouses.company_id
+left join warehouses on warehouses.id = companies_warehouses.warehouses_id
+
+
+select * from companies
+
+select * from warehouses
+
+
+
+
+Create table 
