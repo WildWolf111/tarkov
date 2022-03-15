@@ -93,8 +93,8 @@ from companies join warehouses on companies.id = warehouses.company_id
 
 select companies.id as companies_id, companies.slug as companies_slug, 
 warehouses.id as warehouses_id, warehouses.slug as warehouses_slug
-from companies_warehouses right join companies on companies.id = companies_warehouses.company_id
-left join warehouses on warehouses.id = companies_warehouses.warehouses_id
+from companies join companies_warehouses on companies.id = companies_warehouses.company_id
+join warehouses on warehouses.id = companies_warehouses.warehouses_id
 
 
 select * from companies
@@ -105,3 +105,32 @@ select * from warehouses
 
 
 Create table 
+
+
+
+
+
+
+
+defer rows.Close()
+	Companies_Warehouses_Qwery := make([]*models.Companies_Warehouses_Qwery, 0)
+	log.Println(Companies_Warehouses_Qwery)
+	for rows.Next() {
+		var (
+			comp models.Company
+			warh models.Warehouses
+		)
+		a := models.Companies_Warehouses_Qwery{
+			Companies:  &comp,
+			Warehouses: &warh,
+		}
+		log.Println(rows)
+		err := rows.Scan(&a.Companies.ID, &a.Companies.Slug, &a.Warehouses.ID, &a.Warehouses.Slug)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		Companies_Warehouses_Qwery = append(Companies_Warehouses_Qwery, &a)
+	}
+	return Companies_Warehouses_Qwery, nil
+}
