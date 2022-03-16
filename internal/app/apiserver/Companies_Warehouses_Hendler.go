@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+
 	"net/http"
 	"strconv"
 
@@ -127,7 +128,7 @@ func (api *APIServer) GetCompanyByWarehousesId(writer http.ResponseWriter, req *
 		return
 	}
 
-	Companies_Warehouses_Qwery, err := api.store.Companies_Warehouses().SelectCompaniesByWarehouseId(id)
+	Companies_Warehouses, err := api.store.Companies_Warehouses().SelectCompaniesByWarehouseId(id)
 	if err != nil {
 		api.logger.Info(err)
 		msg := Message{
@@ -141,61 +142,49 @@ func (api *APIServer) GetCompanyByWarehousesId(writer http.ResponseWriter, req *
 	}
 	api.logger.Info("GetCompanyByWarehouseId /companies_warehouses")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(Companies_Warehouses_Qwery)
+	json.NewEncoder(writer).Encode(Companies_Warehouses)
 }
 
 //Delete
 
 func (api *APIServer) DeleteCompaniesWarehousesById(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
-	api.logger.Info("Get Warehouses By Company Id /api/v1/companies_warehouses/warehouses/{company_id}/{warehouse_id}")
+	api.logger.Info("DeleteCompaniesWarehousesById /api/v1/companies_warehouses/delete")
 
-	company_id, err := strconv.Atoi(mux.Vars(req)["company_id"])
-	log.Println(company_id)
+	var Companies_Warehouses models.Companies_Warehouses
+	log.Println(Companies_Warehouses)
+
+	err := json.NewDecoder(req.Body).Decode(&Companies_Warehouses)
 	if err != nil {
-		api.logger.Info("Unable to parse request target")
+		api.logger.Info("Invalid json recieved from client")
 		msg := Message{
 			StatusCode: 400,
-			Message:    "Bad request id",
+			Message:    "Provided json is invalid",
 			IsError:    true,
 		}
 		writer.WriteHeader(400)
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-
-	warehouse_id, err := strconv.Atoi(mux.Vars(req)["warehouse_id"])
-	log.Println(warehouse_id)
+	fmt.Println(Companies_Warehouses)
+	err = api.store.Companies_Warehouses().DeleteCompanies_WarehousesById(&Companies_Warehouses)
 	if err != nil {
-		api.logger.Info("Unable to parse request target")
+		api.logger.Info("Troubles while connections to the warehouse database:", err)
 		msg := Message{
-			StatusCode: 400,
-			Message:    "Bad request id",
+			StatusCode: 501,
+			Message:    "We have some troubles to accessing database. Try again",
 			IsError:    true,
 		}
-		writer.WriteHeader(400)
-		json.NewEncoder(writer).Encode(msg)
-		return
-	}
-
-	err = api.store.Companies_Warehouses().DeleteCompanies_WarehousesById(company_id, warehouse_id)
-
-	if err != nil {
-		api.logger.Info("Failed to delete target", err)
-		msg := Message{
-			StatusCode: 500,
-			Message:    "Deletion failed",
-			IsError:    true,
-		}
-		writer.WriteHeader(500)
+		writer.WriteHeader(501)
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
 	msg := Message{
 		StatusCode: 200,
-		Message:    "Deletion successfull",
+		Message:    "delete complited",
 		IsError:    false,
 	}
-	writer.WriteHeader(200)
+	writer.WriteHeader(201)
 	json.NewEncoder(writer).Encode(msg)
+
 }

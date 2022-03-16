@@ -88,3 +88,14 @@ func (s *Store) Companies_Warehouses() *Companies_WarehousesRepository {
 	}
 	return s.Companies_WarehousesRepository
 }
+
+//Public for Warehouses_cells Repo
+func (s *Store) Warehouses_cells() *Warehouses_CellsRepository {
+	if s.Warehouses_cellsRepository != nil {
+		return s.Warehouses_cellsRepository
+	}
+	s.Warehouses_cellsRepository = &Warehouses_CellsRepository{
+		store: s,
+	}
+	return s.warehouses_cellsRepository
+}

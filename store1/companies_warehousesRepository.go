@@ -115,10 +115,10 @@ func (cwo *Companies_WarehousesRepository) SelectCompaniesByWarehouseId(id int) 
 	return Company, nil
 }
 
-//Delete From companies_warehouses Where company_id = 1 and warehouses_id = 1
+//Delete From companies_warehouses
 
-func (cwo *Companies_WarehousesRepository) DeleteCompanies_WarehousesById(company_id int, warehouse_id int) error {
-	query := fmt.Sprintf("DELETE FROM %s WHERE company_id = %d and warehouses_id = %d", tablecompanies_warehouses, company_id, warehouse_id)
+func (cwo *Companies_WarehousesRepository) DeleteCompanies_WarehousesById(compwar *models.Companies_Warehouses) error {
+	query := fmt.Sprintf("DELETE FROM %s WHERE company_id = %d and warehouses_id = %d", tablecompanies_warehouses, compwar.Companies_id, compwar.Warehouses_id)
 	if _, err := cwo.store.db.Exec(query); err != nil {
 		return err
 	}
