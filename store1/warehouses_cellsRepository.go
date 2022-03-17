@@ -45,14 +45,14 @@ func (warc *Warehouses_CellsRepository) DeleteCompanies_WarehousesById(id int) e
 
 //GET ALL
 
-func (warc *Warehouses_CellsRepository) GetAll() ([]models.Warehouses_cells, error) {
+func (warc *Warehouses_CellsRepository) GetAll() ([]*models.Warehouses_cells, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", tablewarehouses_cells)
 	rows, err := warc.store.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	Warehouses_cells := make([]*models.Warehouses_cells, 0)
+	warehouses_cells := make([]*models.Warehouses_cells, 0)
 	for rows.Next() {
 		a := models.Warehouses_cells{}
 
@@ -62,20 +62,20 @@ func (warc *Warehouses_CellsRepository) GetAll() ([]models.Warehouses_cells, err
 			continue
 		}
 
-		Warehouses_cells = append(Warehouses_cells, &a)
+		warehouses_cells = append(warehouses_cells, &a)
 	}
-	return Warehouses_cells, nil
+	return warehouses_cells, nil
 }
 
 //GET BY ID
-func (warc *Warehouses_CellsRepository) GetByID(id int) ([]models.Warehouses_cells, error) {
-	query := fmt.Sprintf("SELECT * FROM %s Where %s.id = $id", tablewarehouses_cells, tablewarehouses, id)
-	rows, err := warc.store.db.Query(query)
+func (warc *Warehouses_CellsRepository) GetByID(id int) ([]*models.Warehouses_cells, error) {
+	query := fmt.Sprintf("SELECT * FROM %s Where warehouse_id = $id", tablewarehouses_cells)
+	rows, err := warc.store.db.Query(query, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	Warehouses_cells := make([]*models.Warehouses_cells, 0)
+	warehouses_cells := make([]*models.Warehouses_cells, 0)
 	for rows.Next() {
 		a := models.Warehouses_cells{}
 
@@ -85,8 +85,18 @@ func (warc *Warehouses_CellsRepository) GetByID(id int) ([]models.Warehouses_cel
 			continue
 		}
 
-		Warehouses_cells = append(Warehouses_cells, &a)
+		warehouses_cells = append(warehouses_cells, &a)
 	}
 
-	return Warehouses_cells, nil
+	return warehouses_cells, nil
+}
+
+//DleteWarehousecellsById
+
+func (warc *Warehouses_CellsRepository) DeleteWarehouses_cellsById(id int) error {
+	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1 ", tablewarehouses_cells)
+	if _, err := warc.store.db.Exec(query); err != nil {
+		return err
+	}
+	return nil
 }
