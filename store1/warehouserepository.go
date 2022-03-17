@@ -106,7 +106,7 @@ func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
 	return warehouses, nil
 }
 
-//Get all request and helper for FindByID
+//GetByID
 func (wa *WarehouseRepository) GetWarehouseByCompanyId(id int) ([]*models.Warehouses, bool, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE company_id = $1", tablewarehouse)
 	log.Println(query)

@@ -25,7 +25,7 @@ func (api *APIServer) Post(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 	fmt.Println(Warehouses_cells)
-	a, err := api.store.Warehouse().Post(&Warehouses_cells)
+	a, err := api.store.Warehouses_cells().Post(&Warehouses_cells)
 	if err != nil {
 		api.logger.Info("Troubles while connections to the warehouse database:", err)
 		msg := Message{
