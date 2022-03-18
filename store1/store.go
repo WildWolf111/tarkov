@@ -16,6 +16,7 @@ type Store struct {
 	CompanyRepository              *CompanyRepository
 	Companies_WarehousesRepository *Companies_WarehousesRepository
 	Warehouses_CellsRepository     *Warehouses_CellsRepository
+	GtdRepository                  *GtdRepository
 }
 
 // Constructor for store
@@ -99,4 +100,15 @@ func (s *Store) Warehouses_cells() *Warehouses_CellsRepository {
 		store: s,
 	}
 	return s.Warehouses_CellsRepository
+}
+
+//Public for GTD Repo
+func (s *Store) Gtd() *GtdRepository {
+	if s.GtdRepository != nil {
+		return s.GtdRepository
+	}
+	s.GtdRepository = &GtdRepository{
+		store: s,
+	}
+	return s.GtdRepository
 }

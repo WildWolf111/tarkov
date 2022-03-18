@@ -93,6 +93,14 @@ func (s *APIServer) configureRouter() {
 	s.router.HandleFunc(prefix+"/Warehouses_cells"+"/update"+"/{id}", s.UpdateWarehouses_cellsById).Methods("PUT")
 	s.router.HandleFunc(prefix+"/Warehouses_cells"+"/get", s.GetAllWarehouses_cells).Methods("GET")
 	s.router.HandleFunc(prefix+"/Warehouses_cells"+"/{id}", s.GetWarehouses_cellsById).Methods("GET")
+
+	//router GTD'S
+
+	s.router.HandleFunc(prefix+"/gtds", s.PostGtds).Methods("POST")
+	s.router.HandleFunc(prefix+"/gtds"+"/delete"+"/{id}", s.DeleteGtdById).Methods("DELETE")
+	s.router.HandleFunc(prefix+"/gtds"+"/get", s.GetAll_Gtds).Methods("GET")
+	s.router.HandleFunc(prefix+"/gtds"+"/{id}", s.DeleteGtdById).Methods("GET")
+
 }
 
 //configureStore method

@@ -68,27 +68,28 @@ func (warc *Warehouses_CellsRepository) GetAll() ([]*models.Warehouses_cells, er
 }
 
 //GET BY ID
-func (warc *Warehouses_CellsRepository) GetByID(id int) ([]*models.Warehouses_cells, error) {
-	query := fmt.Sprintf("SELECT * FROM %s Where warehouse_id = $id", tablewarehouses_cells)
+func (warc *Warehouses_CellsRepository) GetByID(id int) ([]*models.Warehouses_cells, bool, error) {
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", tablewarehouses_cells)
+	log.Println(query)
 	rows, err := warc.store.db.Query(query, id)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 	defer rows.Close()
 	warehouses_cells := make([]*models.Warehouses_cells, 0)
 	for rows.Next() {
 		a := models.Warehouses_cells{}
-
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.Warehouse_id)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-
 		warehouses_cells = append(warehouses_cells, &a)
 	}
-
-	return warehouses_cells, nil
+	if len(warehouses_cells) == 0 {
+		return warehouses_cells, false, nil
+	}
+	return warehouses_cells, true, nil
 }
 
 //DleteWarehousecellsById

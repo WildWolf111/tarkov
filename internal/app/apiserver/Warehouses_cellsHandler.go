@@ -125,9 +125,9 @@ func (api *APIServer) GetWarehouses_cellsById(writer http.ResponseWriter, req *h
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	warehouses_cells, ok, err := api.store.Warehouse().FindWarehouseById(id)
+	warehouses_cells, ok, err := api.store.Warehouses_cells().GetByID(id)
 	if err != nil {
-		api.logger.Info("Troubles while accessing database table (warehouse) with id. err:", err)
+		api.logger.Info("Troubles while accessing database table (warehouses_cells) with id. err:", err)
 		msg := Message{
 			StatusCode: 500,
 			Message:    "We have some troubles to accessing database. Try again",
