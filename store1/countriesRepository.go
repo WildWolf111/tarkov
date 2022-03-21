@@ -16,7 +16,7 @@ var (
 )
 
 //For Post request
-func (cou *CountriesRepository) PostCountries(a *models.Countries) (*models.Countries, error) {
+func (cou *CountriesRepository) PostCountries(a *models.Country) (*models.Country, error) {
 	query := fmt.Sprintf("INSERT INTO %s (code, country) VALUES ( $1, $2) RETURNING id", tablecountries)
 	log.Println(query)
 	if err := cou.store.db.QueryRow(query, a.Code, a.Country).Scan(&a.ID); err != nil {
@@ -36,16 +36,16 @@ func (cou *CountriesRepository) DeleteCountryById(id int) error {
 
 //GET ALL
 
-func (cou *CountriesRepository) GetAllCountries() ([]*models.Countries, error) {
+func (cou *CountriesRepository) GetAllCountries() ([]*models.Country, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", tablecountries)
 	rows, err := cou.store.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	Countries := make([]*models.Countries, 0)
+	Country := make([]*models.Country, 0)
 	for rows.Next() {
-		a := models.Countries{}
+		a := models.Country{}
 
 		err := rows.Scan(&a.ID, &a.Code, &a.Country)
 		if err != nil {
@@ -53,13 +53,13 @@ func (cou *CountriesRepository) GetAllCountries() ([]*models.Countries, error) {
 			continue
 		}
 
-		Countries = append(Countries, &a)
+		Country = append(Country, &a)
 	}
-	return Countries, nil
+	return Country, nil
 }
 
 //GET BY ID
-func (cou *CountriesRepository) GetCountryByID(id int) ([]*models.Countries, bool, error) {
+func (cou *CountriesRepository) GetCountryByID(id int) ([]*models.Country, bool, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", tablecountries)
 	log.Println(query)
 	rows, err := cou.store.db.Query(query, id)
@@ -67,20 +67,20 @@ func (cou *CountriesRepository) GetCountryByID(id int) ([]*models.Countries, boo
 		return nil, false, err
 	}
 	defer rows.Close()
-	Countries := make([]*models.Countries, 0)
+	Country := make([]*models.Country, 0)
 	for rows.Next() {
-		a := models.Countries{}
+		a := models.Country{}
 		err := rows.Scan(&a.ID, &a.Code, &a.Country)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		Countries = append(Countries, &a)
+		Country = append(Country, &a)
 	}
-	if len(Countries) == 0 {
-		return Countries, false, nil
+	if len(Country) == 0 {
+		return Country, false, nil
 	}
-	return Countries, true, nil
+	return Country, true, nil
 }
 
 //DletecountriescellsById

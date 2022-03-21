@@ -16,7 +16,7 @@ var (
 )
 
 //For Post request
-func (wa *WarehouseRepository) Create(a *models.Warehouses) (*models.Warehouses, error) {
+func (wa *WarehouseRepository) Create(a *models.Warehouse) (*models.Warehouse, error) {
 	query := fmt.Sprintf("INSERT INTO %s (name, slug, company_id, address) VALUES ($1, $2, $3,$4) RETURNING id", tablewarehouse)
 	if err := wa.store.db.QueryRow(query, a.Name, a.Slug, a.Company_id, a.Address).Scan(&a.ID); err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ func (wa *WarehouseRepository) Create(a *models.Warehouses) (*models.Warehouses,
 }
 
 //For Update request
-func (wa *WarehouseRepository) UpdateWarehouseById(a *models.Warehouses) (*models.Warehouses, error) {
+func (wa *WarehouseRepository) UpdateWarehouseById(a *models.Warehouse) (*models.Warehouse, error) {
 	query := fmt.Sprintf("UPDATE %s SET (name, slug, company_id, address) VALUES ($2, $3,$4,$5) WHERE id=$1 RETURNING id", tablewarehouse)
 	if err := wa.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.Company_id, a.Address).Scan(&a.ID); err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (wa *WarehouseRepository) UpdateWarehouseById(a *models.Warehouses) (*model
 }
 
 //For DELETE request
-func (wa *WarehouseRepository) DeleteById(id int) (*models.Warehouses, error) {
+func (wa *WarehouseRepository) DeleteById(id int) (*models.Warehouse, error) {
 	warehouses, ok, err := wa.FindWarehouseById(id)
 	if err != nil {
 		return nil, err
@@ -51,14 +51,14 @@ func (wa *WarehouseRepository) DeleteById(id int) (*models.Warehouses, error) {
 }
 
 //Helper for Delete by id and GET by id request
-func (wa *WarehouseRepository) FindWarehouseById(id int) (*models.Warehouses, bool, error) {
-	warehouses, err := wa.SelectAll()
+func (wa *WarehouseRepository) FindWarehouseById(id int) (*models.Warehouse, bool, error) {
+	Warehouse, err := wa.SelectAll()
 	founded := false
 	if err != nil {
 		return nil, founded, err
 	}
-	var warehouseFinded *models.Warehouses
-	for _, a := range warehouses {
+	var warehouseFinded *models.Warehouse
+	for _, a := range Warehouse {
 		if a.ID == id {
 			warehouseFinded = a
 			founded = true
@@ -70,7 +70,7 @@ func (wa *WarehouseRepository) FindWarehouseById(id int) (*models.Warehouses, bo
 }
 
 //Get all request and helper for FindByID
-func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
+func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouse, error) {
 
 	query := fmt.Sprintf("SELECT * FROM %s", tablewarehouse)
 
@@ -79,9 +79,9 @@ func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	warehouses := make([]*models.Warehouses, 0)
+	Warehouse := make([]*models.Warehouse, 0)
 	for rows.Next() {
-		a := models.Warehouses{}
+		a := models.Warehouse{}
 
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.Company_id, &a.Address)
 		if err != nil {
@@ -100,14 +100,14 @@ func (wa *WarehouseRepository) SelectAll() ([]*models.Warehouses, error) {
 
 			a.Kompany = w
 		*/
-		warehouses = append(warehouses, &a)
+		Warehouse = append(Warehouse, &a)
 	}
 
-	return warehouses, nil
+	return Warehouse, nil
 }
 
 //GetByID
-func (wa *WarehouseRepository) GetWarehouseByCompanyId(id int) ([]*models.Warehouses, bool, error) {
+func (wa *WarehouseRepository) GetWarehouseByCompanyId(id int) ([]*models.Warehouse, bool, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE company_id = $1", tablewarehouse)
 	log.Println(query)
 	rows, err := wa.store.db.Query(query, id)
@@ -115,9 +115,9 @@ func (wa *WarehouseRepository) GetWarehouseByCompanyId(id int) ([]*models.Wareho
 		return nil, false, err
 	}
 	defer rows.Close()
-	warehouses := make([]*models.Warehouses, 0)
+	warehouses := make([]*models.Warehouse, 0)
 	for rows.Next() {
-		a := models.Warehouses{}
+		a := models.Warehouse{}
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.Company_id, &a.Address)
 		if err != nil {
 			log.Println(err)

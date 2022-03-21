@@ -17,7 +17,7 @@ var (
 	tablecompanies_warehouses string = "companies_warehouses"
 )
 
-func (cwo *Companies_WarehousesRepository) Create(a *models.Companies_Warehouses) error {
+func (cwo *Companies_WarehousesRepository) Create(a *models.Company_Warehouse) error {
 	query := fmt.Sprintf("INSERT INTO %s (company_id, warehouses_id) VALUES ($1, $2)", tablecompanies_warehouses)
 	log.Println(query)
 	if _, err := cwo.store.db.Exec(query, a.Companies_id, a.Warehouses_id); err != nil {
@@ -26,7 +26,7 @@ func (cwo *Companies_WarehousesRepository) Create(a *models.Companies_Warehouses
 	return nil
 }
 
-func (cwo *Companies_WarehousesRepository) SelectAllCompanies_Warehouses() ([]*models.Companies_Warehouses_Qwery, error) {
+func (cwo *Companies_WarehousesRepository) SelectAllCompanies_Warehouses() ([]*models.Company_Warehouse_Qwery, error) {
 
 	query := fmt.Sprintf("SELECT %s.id, %s.slug, %s.id, %s.slug FROM %s RIGHT JOIN  %s ON  %s.id = %s.company_id LEFT JOIN %s ON %s.id = %s.warehouses_id",
 		tablecompanies, tablecompanies, tablewarehouses, tablewarehouses, tablecompanies,
@@ -40,30 +40,30 @@ func (cwo *Companies_WarehousesRepository) SelectAllCompanies_Warehouses() ([]*m
 		return nil, err
 	}
 	defer rows.Close()
-	Companies_Warehouses_Qwery := make([]*models.Companies_Warehouses_Qwery, 0)
-	log.Println(Companies_Warehouses_Qwery)
+	Company_Warehouse_Qwery := make([]*models.Company_Warehouse_Qwery, 0)
+	log.Println(Company_Warehouse_Qwery)
 	for rows.Next() {
 		var (
-			comp models.Companies
-			warh models.Warehouses
+			comp models.Company
+			warh models.Warehouse
 		)
-		a := models.Companies_Warehouses_Qwery{
-			Companies:  &comp,
+		a := models.Company_Warehouse_Qwery{
+			Company:    &comp,
 			Warehouses: &warh,
 		}
 		log.Println(rows)
-		err := rows.Scan(&a.Companies.ID, &a.Companies.Slug, &a.Warehouses.ID, &a.Warehouses.Slug)
+		err := rows.Scan(&a.Company.ID, &a.Company.Slug, &a.Warehouses.ID, &a.Warehouses.Slug)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		Companies_Warehouses_Qwery = append(Companies_Warehouses_Qwery, &a)
+		Company_Warehouse_Qwery = append(Company_Warehouse_Qwery, &a)
 	}
-	return Companies_Warehouses_Qwery, nil
+	return Company_Warehouse_Qwery, nil
 }
 
 //SelectWarehousesByCompanyId
-func (cwo *Companies_WarehousesRepository) SelectWarehousesByCompanyId(id int) ([]*models.Warehouses, error) {
+func (cwo *Companies_WarehousesRepository) SelectWarehousesByCompanyId(id int) ([]*models.Warehouse, error) {
 	query := fmt.Sprintf("SELECT %s.* FROM %s JOIN %s ON %s.id = %s.warehouses_id WHERE %s.company_id = %d",
 		tablewarehouses, tablecompanies_warehouses, tablewarehouse, tablewarehouse, tablecompanies_warehouses, tablecompanies_warehouses, id)
 
@@ -74,10 +74,10 @@ func (cwo *Companies_WarehousesRepository) SelectWarehousesByCompanyId(id int) (
 		return nil, err
 	}
 	defer rows.Close()
-	Warehouses := make([]*models.Warehouses, 0)
+	Warehouses := make([]*models.Warehouse, 0)
 	log.Println(Warehouses)
 	for rows.Next() {
-		a := models.Warehouses{}
+		a := models.Warehouse{}
 
 		log.Println(rows)
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.Company_id, &a.Address)
@@ -91,7 +91,7 @@ func (cwo *Companies_WarehousesRepository) SelectWarehousesByCompanyId(id int) (
 }
 
 //SelectCompaniesByWarehouseId
-func (cwo *Companies_WarehousesRepository) SelectCompaniesByWarehouseId(id int) ([]*models.Companies, error) {
+func (cwo *Companies_WarehousesRepository) SelectCompaniesByWarehouseId(id int) ([]*models.Company, error) {
 	query := fmt.Sprintf("SELECT %s.* FROM %s JOIN %s ON %s.id = %s.warehouses_id WHERE %s.warehouses_id = %d",
 		tablecompanies, tablecompanies_warehouses, tablecompanies, tablecompanies, tablecompanies_warehouses, tablecompanies_warehouses, id)
 
@@ -102,23 +102,23 @@ func (cwo *Companies_WarehousesRepository) SelectCompaniesByWarehouseId(id int) 
 		return nil, err
 	}
 	defer rows.Close()
-	Companies := make([]*models.Companies, 0)
+	Company := make([]*models.Company, 0)
 	for rows.Next() {
-		a := models.Companies{}
+		a := models.Company{}
 
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.INN, &a.KPP)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		Companies = append(Companies, &a)
+		Company = append(Company, &a)
 	}
-	return Companies, nil
+	return Company, nil
 }
 
 //Delete From companies_warehouses
 
-func (cwo *Companies_WarehousesRepository) DeleteCompanies_WarehousesById(compwar *models.Companies_Warehouses) error {
+func (cwo *Companies_WarehousesRepository) DeleteCompanies_WarehousesById(compwar *models.Company_Warehouse) error {
 	query := fmt.Sprintf("DELETE FROM %s WHERE company_id = %d and warehouses_id = %d", tablecompanies_warehouses, compwar.Companies_id, compwar.Warehouses_id)
 	log.Println(query)
 	if _, err := cwo.store.db.Exec(query); err != nil {

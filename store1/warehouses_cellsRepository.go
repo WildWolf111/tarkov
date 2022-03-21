@@ -16,7 +16,7 @@ var (
 )
 
 //For Post request
-func (warc *Warehouses_CellsRepository) Post(a *models.Warehouses_cells) (*models.Warehouses_cells, error) {
+func (warc *Warehouses_CellsRepository) Post(a *models.Warehouse_cell) (*models.Warehouse_cell, error) {
 	query := fmt.Sprintf("INSERT INTO %s ( name, slug, warehouses_id) VALUES ( $1, $2, $3) RETURNING id", tablewarehouses_cells)
 	log.Println(query)
 	if err := warc.store.db.QueryRow(query, a.Name, a.Slug, a.Warehouse_id).Scan(&a.ID); err != nil {
@@ -26,7 +26,7 @@ func (warc *Warehouses_CellsRepository) Post(a *models.Warehouses_cells) (*model
 }
 
 //For Update request
-func (warc *Warehouses_CellsRepository) UpdateWarehouses_cells(a *models.Warehouses_cells) (*models.Warehouses_cells, error) {
+func (warc *Warehouses_CellsRepository) UpdateWarehouses_cells(a *models.Warehouse_cell) (*models.Warehouse_cell, error) {
 	query := fmt.Sprintf("UPDATE %s SET ( name, slug, warehouses_id) VALUES ($2, $3,$4) WHERE id=$1 RETURNING id", tablewarehouses_cells)
 	if err := warc.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.Warehouse_id).Scan(&a.ID); err != nil {
 		return nil, err
@@ -45,16 +45,16 @@ func (warc *Warehouses_CellsRepository) DeleteCompanies_WarehousesById(id int) e
 
 //GET ALL
 
-func (warc *Warehouses_CellsRepository) GetAll() ([]*models.Warehouses_cells, error) {
+func (warc *Warehouses_CellsRepository) GetAll() ([]*models.Warehouse_cell, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", tablewarehouses_cells)
 	rows, err := warc.store.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	warehouses_cells := make([]*models.Warehouses_cells, 0)
+	Warehouse_cell := make([]*models.Warehouse_cell, 0)
 	for rows.Next() {
-		a := models.Warehouses_cells{}
+		a := models.Warehouse_cell{}
 
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.Warehouse_id)
 		if err != nil {
@@ -62,13 +62,13 @@ func (warc *Warehouses_CellsRepository) GetAll() ([]*models.Warehouses_cells, er
 			continue
 		}
 
-		warehouses_cells = append(warehouses_cells, &a)
+		Warehouse_cell = append(Warehouse_cell, &a)
 	}
-	return warehouses_cells, nil
+	return Warehouse_cell, nil
 }
 
 //GET BY ID
-func (warc *Warehouses_CellsRepository) GetByID(id int) ([]*models.Warehouses_cells, bool, error) {
+func (warc *Warehouses_CellsRepository) GetByID(id int) ([]*models.Warehouse_cell, bool, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", tablewarehouses_cells)
 	log.Println(query)
 	rows, err := warc.store.db.Query(query, id)
@@ -76,20 +76,20 @@ func (warc *Warehouses_CellsRepository) GetByID(id int) ([]*models.Warehouses_ce
 		return nil, false, err
 	}
 	defer rows.Close()
-	warehouses_cells := make([]*models.Warehouses_cells, 0)
+	Warehouse_cell := make([]*models.Warehouse_cell, 0)
 	for rows.Next() {
-		a := models.Warehouses_cells{}
+		a := models.Warehouse_cell{}
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.Warehouse_id)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		warehouses_cells = append(warehouses_cells, &a)
+		Warehouse_cell = append(Warehouse_cell, &a)
 	}
-	if len(warehouses_cells) == 0 {
-		return warehouses_cells, false, nil
+	if len(Warehouse_cell) == 0 {
+		return Warehouse_cell, false, nil
 	}
-	return warehouses_cells, true, nil
+	return Warehouse_cell, true, nil
 }
 
 //DleteWarehousecellsById

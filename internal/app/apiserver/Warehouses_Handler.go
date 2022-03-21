@@ -33,7 +33,7 @@ func (api *APIServer) GetAllWarehouse(writer http.ResponseWriter, req *http.Requ
 func (api *APIServer) PostWarhouse(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
 	api.logger.Info("Post Warehouse POST /warehouses")
-	var warehouse models.Warehouses
+	var warehouse models.Warehouse
 	err := json.NewDecoder(req.Body).Decode(&warehouse)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
@@ -188,7 +188,7 @@ func (api *APIServer) UpdateWarehouseById(writer http.ResponseWriter, request *h
 		return
 	}
 
-	var newWarehouse models.Warehouses
+	var newWarehouse models.Warehouse
 
 	err = json.NewDecoder(request.Body).Decode(&newWarehouse)
 	if err != nil {

@@ -15,7 +15,7 @@ import (
 func (api *APIServer) Post(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
 	api.logger.Info("Post Warehouse_cells POST /warehouses_cells")
-	var Warehouses_cells models.Warehouses_cells
+	var Warehouses_cells models.Warehouse_cell
 	err := json.NewDecoder(req.Body).Decode(&Warehouses_cells)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
@@ -62,7 +62,7 @@ func (api *APIServer) DeleteWarehouses_cellsById(writer http.ResponseWriter, req
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	var Warehouse_cells models.Warehouses_cells
+	var Warehouse_cells models.Warehouse_cell
 	fmt.Println(Warehouse_cells)
 	err = api.store.Warehouses_cells().DeleteCompanies_WarehousesById(id)
 	if err != nil {
@@ -172,7 +172,7 @@ func (api *APIServer) UpdateWarehouses_cellsById(writer http.ResponseWriter, req
 		return
 	}
 
-	var newWarehouse_cells models.Warehouses_cells
+	var newWarehouse_cells models.Warehouse_cell
 
 	err = json.NewDecoder(request.Body).Decode(&newWarehouse_cells)
 	if err != nil {

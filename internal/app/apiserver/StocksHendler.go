@@ -34,7 +34,7 @@ func (api *APIServer) GetAllStocs(writer http.ResponseWriter, req *http.Request)
 func (api *APIServer) PostStocs(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
 	api.logger.Info("Post Stocs POST /stocs")
-	var stoc models.Stocks
+	var stoc models.Stock
 	err := json.NewDecoder(req.Body).Decode(&stoc)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
@@ -189,7 +189,7 @@ func (api *APIServer) UpdateStocById(writer http.ResponseWriter, request *http.R
 		return
 	}
 
-	var newStoc models.Stocks
+	var newStoc models.Stock
 
 	err = json.NewDecoder(request.Body).Decode(&newStoc)
 	if err != nil {

@@ -1,7 +1,7 @@
 package models
 
 //User model ...
-type Warehouses struct {
+type Warehouse struct {
 	ID         int    `json:"id"`
 	Name       string `json:"name"`
 	Slug       string `json:"slug"`

@@ -35,9 +35,9 @@ func (api *APIServer) PostCompany(writer http.ResponseWriter, req *http.Request)
 	initHeaders(writer)
 	api.logger.Info("Post Company POST /warehouses")
 
-	var Companies models.Companies
+	var Company models.Company
 
-	err := json.NewDecoder(req.Body).Decode(&Companies)
+	err := json.NewDecoder(req.Body).Decode(&Company)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
 		msg := Message{
@@ -49,8 +49,8 @@ func (api *APIServer) PostCompany(writer http.ResponseWriter, req *http.Request)
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	fmt.Println(Companies)
-	a, err := api.store.Company().Create(&Companies)
+	fmt.Println(Company)
+	a, err := api.store.Company().Create(&Company)
 	if err != nil {
 		api.logger.Info("Troubles while connections to the Company database:", err)
 		msg := Message{
@@ -191,7 +191,7 @@ func (api *APIServer) UpdateCompanyById(writer http.ResponseWriter, request *htt
 		return
 	}
 
-	var newCompanies models.Companies
+	var newCompanies models.Company
 
 	err = json.NewDecoder(request.Body).Decode(&newCompanies)
 	if err != nil {

@@ -1,6 +1,6 @@
 package models
 
-type Warehouses_cells struct {
+type Warehouse_cell struct {
 	ID           int    `json:"id"`
 	Name         string `json:"name"`
 	Slug         string `json:"slug"`

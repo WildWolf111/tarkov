@@ -1,6 +1,6 @@
 package models
 
-type Countries struct {
+type Country struct {
 	ID      int    `json:"id"`
 	Code    int    `json:"code"`
 	Country string `json:"country"`

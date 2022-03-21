@@ -1,7 +1,7 @@
 package models
 
 //Article models...
-type Stocks struct {
+type Stock struct {
 	ID                   int    `json:"id"`
 	Company_sender_id    int    `json:"company_sender_id"`
 	Company_recipient_id int    `json:"company_recipient_id"`

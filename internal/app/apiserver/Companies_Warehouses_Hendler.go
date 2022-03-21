@@ -17,9 +17,9 @@ func (api *APIServer) PostCompanies_Warehouses(writer http.ResponseWriter, req *
 	initHeaders(writer)
 	api.logger.Info("Post Companies_Warehouses POST /Companies_Warehouses")
 
-	var Companies_Warehouses models.Companies_Warehouses
+	var Company_Warehouse models.Company_Warehouse
 
-	err := json.NewDecoder(req.Body).Decode(&Companies_Warehouses)
+	err := json.NewDecoder(req.Body).Decode(&Company_Warehouse)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
 		msg := Message{
@@ -31,8 +31,8 @@ func (api *APIServer) PostCompanies_Warehouses(writer http.ResponseWriter, req *
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	fmt.Println(Companies_Warehouses)
-	err = api.store.Companies_Warehouses().Create(&Companies_Warehouses)
+	fmt.Println(Company_Warehouse)
+	err = api.store.Companies_Warehouses().Create(&Company_Warehouse)
 	if err != nil {
 		api.logger.Info("Troubles while connections to the warehouse database:", err)
 		msg := Message{
@@ -151,10 +151,10 @@ func (api *APIServer) DeleteCompaniesWarehousesById(writer http.ResponseWriter, 
 	initHeaders(writer)
 	api.logger.Info("DeleteCompaniesWarehousesById /api/v1/companies_warehouses/delete")
 
-	var Companies_Warehouses models.Companies_Warehouses
-	log.Println(Companies_Warehouses)
+	var Company_Warehouse models.Company_Warehouse
+	log.Println(Company_Warehouse)
 
-	err := json.NewDecoder(req.Body).Decode(&Companies_Warehouses)
+	err := json.NewDecoder(req.Body).Decode(&Company_Warehouse)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
 		msg := Message{
@@ -166,8 +166,8 @@ func (api *APIServer) DeleteCompaniesWarehousesById(writer http.ResponseWriter, 
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	fmt.Println(Companies_Warehouses)
-	err = api.store.Companies_Warehouses().DeleteCompanies_WarehousesById(&Companies_Warehouses)
+	fmt.Println(Company_Warehouse)
+	err = api.store.Companies_Warehouses().DeleteCompanies_WarehousesById(&Company_Warehouse)
 	if err != nil {
 		api.logger.Info("Troubles while connections to the warehouse database:", err)
 		msg := Message{

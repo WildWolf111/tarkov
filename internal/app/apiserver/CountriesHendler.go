@@ -14,8 +14,8 @@ import (
 func (api *APIServer) PostCountries(writer http.ResponseWriter, req *http.Request) {
 	initHeaders(writer)
 	api.logger.Info("Post Countries POST /countries")
-	var Countries models.Countries
-	err := json.NewDecoder(req.Body).Decode(&Countries)
+	var Country models.Country
+	err := json.NewDecoder(req.Body).Decode(&Country)
 	if err != nil {
 		api.logger.Info("Invalid json recieved from client")
 		msg := Message{
@@ -27,8 +27,8 @@ func (api *APIServer) PostCountries(writer http.ResponseWriter, req *http.Reques
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	fmt.Println(Countries)
-	a, err := api.store.Countries().PostCountries(&Countries)
+	fmt.Println(Country)
+	a, err := api.store.Countries().PostCountries(&Country)
 	if err != nil {
 		api.logger.Info("Troubles while connections to the countries database:", err)
 		msg := Message{
@@ -61,8 +61,8 @@ func (api *APIServer) DeleteCountryById(writer http.ResponseWriter, req *http.Re
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	var Countries models.Countries
-	fmt.Println(Countries)
+	var Country models.Country
+	fmt.Println(Country)
 	err = api.store.Countries().DeleteCountryById(id)
 	if err != nil {
 		api.logger.Info("Troubles while connections to the countries database:", err)
