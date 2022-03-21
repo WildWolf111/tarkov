@@ -35,7 +35,7 @@ func (api *APIServer) PostCompany(writer http.ResponseWriter, req *http.Request)
 	initHeaders(writer)
 	api.logger.Info("Post Company POST /warehouses")
 
-	var Companies models.Company
+	var Companies models.Companies
 
 	err := json.NewDecoder(req.Body).Decode(&Companies)
 	if err != nil {
@@ -191,7 +191,7 @@ func (api *APIServer) UpdateCompanyById(writer http.ResponseWriter, request *htt
 		return
 	}
 
-	var newCompanies models.Company
+	var newCompanies models.Companies
 
 	err = json.NewDecoder(request.Body).Decode(&newCompanies)
 	if err != nil {

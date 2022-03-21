@@ -1,6 +1,6 @@
 package models
 
 type Companies_Warehouses_Qwery struct {
-	Companies  *Company
+	Companies  *Companies
 	Warehouses *Warehouses
 }
