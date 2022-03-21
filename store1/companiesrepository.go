@@ -16,7 +16,7 @@ var (
 )
 
 //For Post request
-func (co *CompanyRepository) Create(a *models.Company) (*models.Company, error) {
+func (co *CompanyRepository) Create(a *models.Companies) (*models.Companies, error) {
 	query := fmt.Sprintf("INSERT INTO %s (name, slug, inn, kpp) VALUES ($1, $2, $3,$4) RETURNING id", tablecompanies)
 	if err := co.store.db.QueryRow(query, a.Name, a.Slug, a.INN, a.KPP).Scan(&a.ID); err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ func (co *CompanyRepository) Create(a *models.Company) (*models.Company, error) 
 }
 
 //For Update request
-func (co *CompanyRepository) UpdateCompanyById(a *models.Company) (*models.Company, error) {
+func (co *CompanyRepository) UpdateCompanyById(a *models.Companies) (*models.Companies, error) {
 	query := fmt.Sprintf("UPDATE %s SET (name, slug, inn, kpp) VALUES ($2, $3,$4,$5) WHERE id=$1 RETURNING id", tablecompanies)
 	if err := co.store.db.QueryRow(query, a.ID, a.Name, a.Slug, a.INN, a.KPP).Scan(&a.ID); err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (co *CompanyRepository) UpdateCompanyById(a *models.Company) (*models.Compa
 }
 
 //For DELETE request
-func (co *CompanyRepository) DeleteById(id int) (*models.Company, error) {
+func (co *CompanyRepository) DeleteById(id int) (*models.Companies, error) {
 	companies, ok, err := co.FindCompanyById(id)
 	if err != nil {
 		return nil, err
@@ -51,13 +51,13 @@ func (co *CompanyRepository) DeleteById(id int) (*models.Company, error) {
 }
 
 //Helper for Delete by id and GET by id request
-func (co *CompanyRepository) FindCompanyById(id int) (*models.Company, bool, error) {
+func (co *CompanyRepository) FindCompanyById(id int) (*models.Companies, bool, error) {
 	companies, err := co.SelectAll()
 	found := false
 	if err != nil {
 		return nil, found, err
 	}
-	var companyFound *models.Company
+	var companyFound *models.Companies
 	for _, a := range companies {
 		if a.ID == id {
 			companyFound = a
@@ -70,16 +70,16 @@ func (co *CompanyRepository) FindCompanyById(id int) (*models.Company, bool, err
 }
 
 //Get all request
-func (co *CompanyRepository) SelectAll() ([]*models.Company, error) {
+func (co *CompanyRepository) SelectAll() ([]*models.Companies, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", tablecompanies)
 	rows, err := co.store.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	companies := make([]*models.Company, 0)
+	Companies := make([]*models.Companies, 0)
 	for rows.Next() {
-		a := models.Company{}
+		a := models.Companies{}
 
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.INN, &a.KPP)
 		if err != nil {
@@ -97,22 +97,22 @@ func (co *CompanyRepository) SelectAll() ([]*models.Company, error) {
 			}
 			a.Warehouses = w
 		*/
-		companies = append(companies, &a)
+		Companies = append(Companies, &a)
 	}
-	return companies, nil
+	return Companies, nil
 }
 
 //Get  request dByID
-func (co *CompanyRepository) GetCompanyById(id int) ([]*models.Company, bool, error) {
+func (co *CompanyRepository) GetCompanyById(id int) ([]*models.Companies, bool, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", tablecompanies)
 	rows, err := co.store.db.Query(query, id)
 	if err != nil {
 		return nil, false, err
 	}
 	defer rows.Close()
-	companies := make([]*models.Company, 0)
+	Companies := make([]*models.Companies, 0)
 	for rows.Next() {
-		a := models.Company{}
+		a := models.Companies{}
 
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.INN, &a.KPP)
 		if err != nil {
@@ -130,10 +130,10 @@ func (co *CompanyRepository) GetCompanyById(id int) ([]*models.Company, bool, er
 			continue
 		}
 		*/
-		companies = append(companies, &a)
+		Companies = append(Companies, &a)
 	}
-	if len(companies) == 0 {
-		return companies, false, nil
+	if len(Companies) == 0 {
+		return Companies, false, nil
 	}
-	return companies, true, nil
+	return Companies, true, nil
 }

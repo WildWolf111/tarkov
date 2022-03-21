@@ -19,6 +19,7 @@ var (
 
 func (cwo *Companies_WarehousesRepository) Create(a *models.Companies_Warehouses) error {
 	query := fmt.Sprintf("INSERT INTO %s (company_id, warehouses_id) VALUES ($1, $2)", tablecompanies_warehouses)
+	log.Println(query)
 	if _, err := cwo.store.db.Exec(query, a.Companies_id, a.Warehouses_id); err != nil {
 		return err
 	}
@@ -43,7 +44,7 @@ func (cwo *Companies_WarehousesRepository) SelectAllCompanies_Warehouses() ([]*m
 	log.Println(Companies_Warehouses_Qwery)
 	for rows.Next() {
 		var (
-			comp models.Company
+			comp models.Companies
 			warh models.Warehouses
 		)
 		a := models.Companies_Warehouses_Qwery{
@@ -90,7 +91,7 @@ func (cwo *Companies_WarehousesRepository) SelectWarehousesByCompanyId(id int) (
 }
 
 //SelectCompaniesByWarehouseId
-func (cwo *Companies_WarehousesRepository) SelectCompaniesByWarehouseId(id int) ([]*models.Company, error) {
+func (cwo *Companies_WarehousesRepository) SelectCompaniesByWarehouseId(id int) ([]*models.Companies, error) {
 	query := fmt.Sprintf("SELECT %s.* FROM %s JOIN %s ON %s.id = %s.warehouses_id WHERE %s.warehouses_id = %d",
 		tablecompanies, tablecompanies_warehouses, tablecompanies, tablecompanies, tablecompanies_warehouses, tablecompanies_warehouses, id)
 
@@ -101,24 +102,25 @@ func (cwo *Companies_WarehousesRepository) SelectCompaniesByWarehouseId(id int) 
 		return nil, err
 	}
 	defer rows.Close()
-	Company := make([]*models.Company, 0)
+	Companies := make([]*models.Companies, 0)
 	for rows.Next() {
-		a := models.Company{}
+		a := models.Companies{}
 
 		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.INN, &a.KPP)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		Company = append(Company, &a)
+		Companies = append(Companies, &a)
 	}
-	return Company, nil
+	return Companies, nil
 }
 
 //Delete From companies_warehouses
 
 func (cwo *Companies_WarehousesRepository) DeleteCompanies_WarehousesById(compwar *models.Companies_Warehouses) error {
 	query := fmt.Sprintf("DELETE FROM %s WHERE company_id = %d and warehouses_id = %d", tablecompanies_warehouses, compwar.Companies_id, compwar.Warehouses_id)
+	log.Println(query)
 	if _, err := cwo.store.db.Exec(query); err != nil {
 		return err
 	}

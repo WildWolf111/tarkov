@@ -12,7 +12,7 @@ type Store struct {
 	config                         *Config
 	db                             *sql.DB
 	warehouseRepository            *WarehouseRepository
-	stocRepository                 *StocRepository
+	StocksRepository               *StocksRepository
 	CompanyRepository              *CompanyRepository
 	Companies_WarehousesRepository *Companies_WarehousesRepository
 	Warehouses_CellsRepository     *Warehouses_CellsRepository
@@ -61,14 +61,14 @@ func (s *Store) Warehouse() *WarehouseRepository {
 }
 
 //Stoc for StocsRepo
-func (s *Store) Stoc() *StocRepository {
-	if s.stocRepository != nil {
-		return s.stocRepository
+func (s *Store) Stoc() *StocksRepository {
+	if s.StocksRepository != nil {
+		return s.StocksRepository
 	}
-	s.stocRepository = &StocRepository{
+	s.StocksRepository = &StocksRepository{
 		store: s,
 	}
-	return s.stocRepository
+	return s.StocksRepository
 }
 
 //Public for CompanyRepo

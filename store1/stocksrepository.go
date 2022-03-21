@@ -7,7 +7,7 @@ import (
 	"github.com/WildWolf111/StandarWebSrver2/internal/app/models"
 )
 
-type StocRepository struct {
+type StocksRepository struct {
 	store *Store
 }
 
@@ -16,7 +16,7 @@ var (
 )
 
 //For Post request
-func (st *StocRepository) Create(a *models.Stocs) (*models.Stocs, error) {
+func (st *StocksRepository) Create(a *models.Stocks) (*models.Stocks, error) {
 	query := fmt.Sprintf("INSERT INTO %s (id,company_sender_id, company_recipient_id, product_id, quantity, warehouse_cell_id, gtd_id) VALUES ($1, $2, $3,$4,$5,$6,$7) RETURNING id", tablestocs)
 	log.Println(query)
 	if err := st.store.db.QueryRow(query, a.ID, a.Company_sender_id, a.Company_recipient_id, a.Product_id, a.Quantity, a.Warehouse_cell_id, a.GTD_id).Scan(&a.ID); err != nil {
@@ -27,7 +27,7 @@ func (st *StocRepository) Create(a *models.Stocs) (*models.Stocs, error) {
 
 // For Put request
 
-func (st *StocRepository) UpdateStocById(a *models.Stocs) (*models.Stocs, error) {
+func (st *StocksRepository) UpdateStocById(a *models.Stocks) (*models.Stocks, error) {
 	query := fmt.Sprintf("UPDATE %s SET (id, company_sender_id, company_recipient_id, product_id, quantity, warehouse_cell_id, gtd_id) VALUES ($1, $2, $3,$4,$5,$6,&7) WHERE id=$1 RETURNING id", tablestocs)
 	if err := st.store.db.QueryRow(query, a.ID, a.Company_sender_id, a.Company_recipient_id, a.Product_id, a.Quantity, a.Warehouse_cell_id, a.GTD_id).Scan(&a.ID); err != nil {
 		return nil, err
@@ -37,8 +37,8 @@ func (st *StocRepository) UpdateStocById(a *models.Stocs) (*models.Stocs, error)
 }
 
 //For DELETE request
-func (st *StocRepository) DeleteById(id int) (*models.Stocs, error) {
-	stocs, ok, err := st.FindStocById(id)
+func (st *StocksRepository) DeleteById(id int) (*models.Stocks, error) {
+	Stocks, ok, err := st.FindStocById(id)
 	if err != nil {
 		return nil, err
 	}
@@ -50,17 +50,17 @@ func (st *StocRepository) DeleteById(id int) (*models.Stocs, error) {
 		}
 	}
 
-	return stocs, nil
+	return Stocks, nil
 }
 
 //Helper for Delete by id and GET by id request
-func (st *StocRepository) FindStocById(id int) (*models.Stocs, bool, error) {
+func (st *StocksRepository) FindStocById(id int) (*models.Stocks, bool, error) {
 	stocs, err := st.SelectAll()
 	founded := false
 	if err != nil {
 		return nil, founded, err
 	}
-	var stocFinded *models.Stocs
+	var stocFinded *models.Stocks
 	for _, a := range stocs {
 		if a.ID == id {
 			stocFinded = a
@@ -73,7 +73,7 @@ func (st *StocRepository) FindStocById(id int) (*models.Stocs, bool, error) {
 }
 
 //Get all request and helper for FindByID
-func (st *StocRepository) SelectAll() ([]*models.Stocs, error) {
+func (st *StocksRepository) SelectAll() ([]*models.Stocks, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", tablestocs)
 	log.Println(query)
 	rows, err := st.store.db.Query(query)
@@ -82,16 +82,16 @@ func (st *StocRepository) SelectAll() ([]*models.Stocs, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	stocs := make([]*models.Stocs, 0)
+	Stocks := make([]*models.Stocks, 0)
 	for rows.Next() {
-		a := models.Stocs{}
+		a := models.Stocks{}
 		log.Println(rows)
 		err := rows.Scan(&a.ID, &a.Company_sender_id, &a.Company_recipient_id, &a.Product_id, &a.Quantity, &a.Warehouse_cell_id, &a.GTD_id)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		stocs = append(stocs, &a)
+		Stocks = append(Stocks, &a)
 	}
-	return stocs, nil
+	return Stocks, nil
 }
