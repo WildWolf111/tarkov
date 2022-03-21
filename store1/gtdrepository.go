@@ -12,12 +12,12 @@ type GtdRepository struct {
 }
 
 var (
-	tablegtd string = "gtd"
+	tablegtd string = "gtds"
 )
 
 //For Post request
 func (gtd *GtdRepository) PostGtds(a *models.Gtd) (*models.Gtd, error) {
-	query := fmt.Sprintf("INSERT INTO %s (  coutry,number) VALUES ( $1, $2,) RETURNING id", tablegtd)
+	query := fmt.Sprintf("INSERT INTO %s (  coutry,number) VALUES ( $1, $2) RETURNING id", tablegtd)
 	log.Println(query)
 	if err := gtd.store.db.QueryRow(query, a.Country, a.Number).Scan(&a.ID); err != nil {
 		return nil, err

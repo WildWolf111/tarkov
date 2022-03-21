@@ -101,6 +101,20 @@ func (s *APIServer) configureRouter() {
 	s.router.HandleFunc(prefix+"/gtds"+"/get", s.GetAll_Gtds).Methods("GET")
 	s.router.HandleFunc(prefix+"/gtds"+"/{id}", s.DeleteGtdById).Methods("GET")
 
+	//Countries
+
+	s.router.HandleFunc(prefix+"/countries", s.PostCountries).Methods("POST")
+	s.router.HandleFunc(prefix+"/countries"+"/delete"+"/{id}", s.DeleteCountryById).Methods("DELETE")
+	s.router.HandleFunc(prefix+"/countries"+"/get", s.GetAll_Countries).Methods("GET")
+	s.router.HandleFunc(prefix+"/countries"+"/{id}", s.GetCountryById).Methods("GET")
+
+	//Product
+
+	s.router.HandleFunc(prefix+"/products", s.PostProduct).Methods("POST")
+	s.router.HandleFunc(prefix+"/products"+"/delete"+"/{id}", s.DeleteProductById).Methods("DELETE")
+	s.router.HandleFunc(prefix+"/products"+"/get", s.GetAllProducts).Methods("GET")
+	s.router.HandleFunc(prefix+"/products"+"/{id}", s.GetProductById).Methods("GET")
+
 }
 
 //configureStore method

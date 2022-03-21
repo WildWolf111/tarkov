@@ -102,7 +102,7 @@ func (api *APIServer) GetAll_Gtds(writer http.ResponseWriter, req *http.Request)
 		json.NewEncoder(writer).Encode(msg)
 		return
 	}
-	api.logger.Info("Get All Company GET /Warehouses_cells")
+	api.logger.Info("Get All Gtd GET /gtd")
 	writer.WriteHeader(http.StatusOK)
 	json.NewEncoder(writer).Encode(Gtd)
 }
