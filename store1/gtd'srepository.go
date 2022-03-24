@@ -7,7 +7,7 @@ import (
 	"github.com/WildWolf111/StandarWebSrver2/internal/app/models"
 )
 
-type GtdRepository struct {
+type Gtds_Repository struct {
 	store *Store
 }
 
@@ -16,7 +16,7 @@ var (
 )
 
 //For Post request
-func (gtd *GtdRepository) PostGtds(a *models.Gtd) (*models.Gtd, error) {
+func (gtd *Gtds_Repository) PostGtds(a *models.Gtd) (*models.Gtd, error) {
 	query := fmt.Sprintf("INSERT INTO %s (  coutry,number) VALUES ( $1, $2) RETURNING id", tablegtd)
 	log.Println(query)
 	if err := gtd.store.db.QueryRow(query, a.Country, a.Number).Scan(&a.ID); err != nil {
@@ -26,7 +26,7 @@ func (gtd *GtdRepository) PostGtds(a *models.Gtd) (*models.Gtd, error) {
 }
 
 //For delete
-func (gtd *GtdRepository) DeleteGtdsById(id int) error {
+func (gtd *Gtds_Repository) DeleteGtdsById(id int) error {
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = %d ", tablegtd, id)
 	if _, err := gtd.store.db.Exec(query); err != nil {
 		return err
@@ -36,7 +36,7 @@ func (gtd *GtdRepository) DeleteGtdsById(id int) error {
 
 //GET ALL
 
-func (gtd *GtdRepository) GetAllGtds() ([]*models.Gtd, error) {
+func (gtd *Gtds_Repository) GetAllGtds() ([]*models.Gtd, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", tablegtd)
 	rows, err := gtd.store.db.Query(query)
 	if err != nil {
@@ -59,7 +59,7 @@ func (gtd *GtdRepository) GetAllGtds() ([]*models.Gtd, error) {
 }
 
 //GET BY ID
-func (gtd *GtdRepository) GetGtdByID(id int) ([]*models.Gtd, bool, error) {
+func (gtd *Gtds_Repository) GetGtdByID(id int) ([]*models.Gtd, bool, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", tablegtd)
 	log.Println(query)
 	rows, err := gtd.store.db.Query(query, id)
@@ -85,7 +85,7 @@ func (gtd *GtdRepository) GetGtdByID(id int) ([]*models.Gtd, bool, error) {
 
 //DleteWarehousecellsById
 
-func (gtd *GtdRepository) DeleteGtdById(id int) error {
+func (gtd *Gtds_Repository) DeleteGtdById(id int) error {
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1 ", tablegtd)
 	if _, err := gtd.store.db.Exec(query); err != nil {
 		return err
