@@ -86,17 +86,6 @@ func (co *CompanyRepository) SelectAll() ([]*models.Company, error) {
 			log.Println(err)
 			continue
 		}
-		/*
-			w, ok, err := ko.store.Warehouse().GetWarehouseByCompanyId(a.ID)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-			if !ok {
-				log.Printf("Kompany with id %d not found", a.ID)
-			}
-			a.Warehouses = w
-		*/
 		Company = append(Company, &a)
 	}
 	return Company, nil
@@ -119,21 +108,34 @@ func (co *CompanyRepository) GetCompanyById(id int) ([]*models.Company, bool, er
 			log.Println(err)
 			continue
 		}
-		/*var ok bool
-		a.Warehouses, ok, err = co.store.Warehouse().GetWarehouseByCompanyId(a.ID)
-		if err != nil {
-			log.Println(err)
-			continue
-		}
-		if !ok {
-			log.Printf("Company warehouse with id %d not found", a.ID)
-			continue
-		}
-		*/
+
 		Company = append(Company, &a)
 	}
 	if len(Company) == 0 {
 		return Company, false, nil
 	}
 	return Company, true, nil
+}
+
+func (co *CompanyRepository) GetCompanyBy_Slug(slug string) ([]*models.Company, error) {
+	query := fmt.Sprint("Select * FROM " + tablecompanies + " WHERE slug LIKE '%" + slug + "%'")
+	fmt.Println(query)
+	rows, err := co.store.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	Company := make([]*models.Company, 0)
+	for rows.Next() {
+		a := models.Company{}
+		err := rows.Scan(&a.ID, &a.Name, &a.Slug, &a.INN, &a.KPP)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		Company = append(Company, &a)
+	}
+	return Company, nil
 }

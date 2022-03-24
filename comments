@@ -134,3 +134,10 @@ defer rows.Close()
 	}
 	return Companies_Warehouses_Qwery, nil
 }
+
+
+
+
+
+
+query:= fmt.Sprintf("SELECT * FROM %s WHERE slug = $1", tablecompanies)

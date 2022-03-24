@@ -220,3 +220,26 @@ func (api *APIServer) UpdateCompanyById(writer http.ResponseWriter, request *htt
 	writer.WriteHeader(201)
 	json.NewEncoder(writer).Encode(a)
 }
+
+//Get Companies By Slug
+func (api *APIServer) GetCompanyBySlug(writer http.ResponseWriter, req *http.Request) {
+	initHeaders(writer)
+	api.logger.Info("Get company by Slug /api/v1/company/{slug}")
+	slug := mux.Vars(req)["slug"]
+	
+	Company, err := api.store.Company().GetCompanyBy_Slug(slug)
+	if err != nil {
+
+		api.logger.Info("", err)
+		msg := Message{
+			StatusCode: 501,
+			Message:    "We have some troubles to accessing database. Try again later",
+			IsError:    true,
+		}
+		writer.WriteHeader(501)
+		json.NewEncoder(writer).Encode(msg)
+		return
+	}
+	writer.WriteHeader(200)
+	json.NewEncoder(writer).Encode(Company)
+}

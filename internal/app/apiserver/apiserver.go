@@ -72,12 +72,13 @@ func (s *APIServer) configureRouter() {
 	s.router.HandleFunc(prefix+"/stocs", s.PostStocs).Methods("POST")
 	s.router.HandleFunc(prefix+"/{id}", s.UpdateStocById).Methods("PUT")
 
-	//router kompanies
+	//router company
 	s.router.HandleFunc(prefix+"/companies", s.GetAllCompany).Methods("GET")
 	s.router.HandleFunc(prefix+"/companies"+"/{id}", s.GetCompanyById).Methods("GET")
 	s.router.HandleFunc(prefix+"/companies"+"/{id}", s.DeleteCompanyById).Methods("DELETE")
 	s.router.HandleFunc(prefix+"/companies", s.PostCompany).Methods("POST")
 	s.router.HandleFunc(prefix+"/{id}", s.UpdateCompanyById).Methods("PUT")
+	s.router.HandleFunc(prefix+"/company"+"/{slug}", s.GetCompanyBySlug).Methods("GET")
 
 	//router companies_warhouses
 	s.router.HandleFunc(prefix+"/companies_warehouses", s.PostCompanies_Warehouses).Methods("POST")
